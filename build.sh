@@ -16,7 +16,6 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 # ReleaseOS: OpenSim, no KDU/FMOD, tests off, x86-64-v3 tuned
-autobuild configure -A 64 -c ReleaseOS -- -DLL_TESTS:BOOL=FALSE
-autobuild build -A 64 -c ReleaseOS -- -DLL_TESTS:BOOL=FALSE
+autobuild build -A 64 -c ReleaseOS -- --chan=ManikinekoOnline -DLL_TESTS:BOOL=FALSE
 
 echo "Build complete. Output is in the usual build/package directory."
