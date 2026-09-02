@@ -115,6 +115,9 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
+// <Mko> DLL protocol plugin manager
+#include "mkopluginmanager.h"
+
 #include "llweb.h"
 // <FS:Ansariel> [FS communication UI]
 #include "fsfloatervoicecontrols.h"
@@ -1477,6 +1480,9 @@ bool LLAppViewer::init()
         gDirUtilp->deleteDirAndContents(gDirUtilp->getDumpLogsDirPath());
     }
 #endif
+    // <Mko> Initialize DLL protocol plugins.
+    MkoPluginManager::instance().init();
+
     LL_PROFILER_FRAME_END;
     return true;
 }
@@ -2468,6 +2474,9 @@ bool LLAppViewer::cleanup()
         // Turn off Space Navigator and similar devices
         LLViewerJoystick::getInstance()->terminate();
     }
+
+    // <Mko> Shutdown DLL protocol plugins.
+    MkoPluginManager::instance().shutdown();
 
     LL_INFOS() << "Shutting down message system" << LL_ENDL;
     end_messaging_system();

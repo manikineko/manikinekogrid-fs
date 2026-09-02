@@ -29,6 +29,27 @@ find viewer -type f -name 'firestorm_icon*.ico' | while read -r f; do
     convert "$LOGO" -resize 256x256 -define icon:auto-resize=16,32,48,128,256 "$f"
 done
 
+echo "==> Rebranding splash and login logos..."
+
+# Startup/login splash logos (Firestorm/Phoenix branding)
+find viewer -type f -name 'startup_logo.png' | while read -r f; do
+    size="$(identify -format '%w %h' "$f" | head -n1)"
+    w="$(echo "$size" | cut -d' ' -f1)"
+    h="$(echo "$size" | cut -d' ' -f2)"
+    if [ -n "$w" ] && [ -n "$h" ]; then
+        convert "$LOGO" -resize "${w}x${h}^" -gravity center -extent "${w}x${h}" -background transparent "$f"
+    fi
+done
+
+find viewer -type f -name 'login_fs_logo.png' | while read -r f; do
+    size="$(identify -format '%w %h' "$f" | head -n1)"
+    w="$(echo "$size" | cut -d' ' -f1)"
+    h="$(echo "$size" | cut -d' ' -f2)"
+    if [ -n "$w" ] && [ -n "$h" ]; then
+        convert "$LOGO" -resize "${w}x${h}^" -gravity center -extent "${w}x${h}" -background transparent "$f"
+    fi
+done
+
 echo "==> Rebranding user-facing strings..."
 
 # Core English strings
