@@ -15,6 +15,8 @@
 #ifndef MKO_PLUGIN_API_H
 #define MKO_PLUGIN_API_H
 
+#include <stddef.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -27,7 +29,7 @@ extern "C" {
   #define MKO_PLUGIN_EXPORT
 #endif
 
-#define MKO_PLUGIN_API_VERSION 4
+#define MKO_PLUGIN_API_VERSION 5
 
 typedef enum
 {
@@ -52,6 +54,9 @@ struct MkoHostInterface
     const char* (*get_plugin_dir)(void); /* Absolute path to the plugin dir. */
     void (*show_notification)(const char* message);
     void (*chat)(const char* message, int chat_type);
+    int (*get_setting)(const char* name, char* out, size_t out_len);
+    int (*set_setting)(const char* name, const char* value);
+    int (*register_setting)(const char* name, const char* default_value, const char* label, const char* type);
 };
 
 /* Plugin entry point. A plugin must export a function named

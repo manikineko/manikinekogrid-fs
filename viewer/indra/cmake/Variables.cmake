@@ -184,7 +184,7 @@ set(FLICKR_API_KEY "daaabff93a967e0f37fa18863bb43b29")
 set(FLICKR_API_SECRET "846f0958020b553e") 
 
 # Discord client key.
-set(DDISCORD_API_KEY "427641535253708801")
+set(DDISCORD_API_KEY "1263849976069623861")
 
 # FS:ND Don't force this into the cache, that can have some strange effects. Instead make it a normal variable
 #set(ENABLE_SIGNING OFF CACHE BOOL "Enable signing the viewer")

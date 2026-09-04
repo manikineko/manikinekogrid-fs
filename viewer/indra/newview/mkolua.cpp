@@ -99,6 +99,44 @@ static int l_chat(lua_State* L)
     return 0;
 }
 
+static int l_get_setting(lua_State* L)
+{
+    if (!sHost) return 0;
+    const char* name = luaL_checkstring(L, 1);
+    char buf[4096];
+    if (sHost->get_setting(name, buf, sizeof(buf)) == 0)
+    {
+        lua_pushstring(L, buf);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+    return 1;
+}
+
+static int l_set_setting(lua_State* L)
+{
+    if (!sHost) return 0;
+    const char* name = luaL_checkstring(L, 1);
+    const char* value = luaL_checkstring(L, 2);
+    int r = sHost->set_setting(name, value);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
+static int l_register_setting(lua_State* L)
+{
+    if (!sHost) return 0;
+    const char* name = luaL_checkstring(L, 1);
+    const char* default_value = luaL_checkstring(L, 2);
+    const char* label = luaL_checkstring(L, 3);
+    const char* type = luaL_checkstring(L, 4);
+    int r = sHost->register_setting(name, default_value, label, type);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
 static int l_register_on_message(lua_State* L)
 {
     if (!lua_isfunction(L, 1))
@@ -122,6 +160,9 @@ static void register_mko_table(lua_State* L)
     lua_pushcfunction(L, l_get_plugin_dir); lua_setfield(L, -2, "get_plugin_dir");
     lua_pushcfunction(L, l_show_notification); lua_setfield(L, -2, "show_notification");
     lua_pushcfunction(L, l_chat);         lua_setfield(L, -2, "chat");
+    lua_pushcfunction(L, l_get_setting);  lua_setfield(L, -2, "get_setting");
+    lua_pushcfunction(L, l_set_setting);  lua_setfield(L, -2, "set_setting");
+    lua_pushcfunction(L, l_register_setting); lua_setfield(L, -2, "register_setting");
     lua_pushcfunction(L, l_register_on_message); lua_setfield(L, -2, "register_on_message");
     lua_setglobal(L, "mko");
 }

@@ -16,6 +16,9 @@
 #include "llchat.h"
 
 #include <sstream>
+#include <fstream>
+#include <cstdio>
+#include <mutex>
 
 #if LL_WINDOWS
 #include <windows.h>
@@ -46,6 +49,11 @@ void MkoPluginManager::init()
     sHostInterface.get_plugin_dir = &MkoPluginManager::hostGetPluginDir;
     sHostInterface.show_notification = &MkoPluginManager::hostShowNotification;
     sHostInterface.chat = &MkoPluginManager::hostChat;
+    sHostInterface.get_setting = &MkoPluginManager::hostGetSetting;
+    sHostInterface.set_setting = &MkoPluginManager::hostSetSetting;
+    sHostInterface.register_setting = &MkoPluginManager::hostRegisterSetting;
+
+    loadSettings();
 
     // Register this manager as a protocol dispatch interceptor.
     LLMessageSystem::setDispatchInterceptor(&MkoPluginManager::dispatchMessage);
@@ -55,6 +63,7 @@ void MkoPluginManager::init()
 
 void MkoPluginManager::shutdown()
 {
+    saveSettings();
     LLMessageSystem::setDispatchInterceptor(nullptr);
     unloadPlugins();
 }
@@ -246,12 +255,6 @@ int MkoPluginManager::hostSendMessage(const char* msg_name, const char* llsd_not
         return -1;
     }
 
-    if (!gMessageSystem)
-    {
-        LL_WARNS("MkoPlugin") << "send_message called before message system is ready" << LL_ENDL;
-        return -1;
-    }
-
     std::istringstream istr(llsd_notation);
     LLSD message;
     if (!LLSDSerialize::deserialize(message, istr, LLSDSerialize::SIZE_UNLIMITED))
@@ -260,7 +263,10 @@ int MkoPluginManager::hostSendMessage(const char* msg_name, const char* llsd_not
         return -1;
     }
 
-    LLMessageSystem::dispatch(std::string(msg_name), message);
+    // Plugin messages (e.g., MkoDiscord, MkoSteamworks) are not registered
+    // with the legacy message template, so route them directly through the
+    // plugin manager instead of LLMessageSystem::dispatch.
+    MkoPluginManager::dispatchMessage(std::string(msg_name), message, LLHTTPNode::ResponsePtr());
     return 0;
 }
 
@@ -300,4 +306,127 @@ void MkoPluginManager::hostChat(const char* message, int chat_type)
     if (chat_type == 0) type = CHAT_TYPE_WHISPER;
     else if (chat_type == 2) type = CHAT_TYPE_SHOUT;
     FSNearbyChat::instance().sendChatFromViewer(std::string(message), type, false);
+}
+
+void MkoPluginManager::broadcastToPlugins(const std::string& msg_name,
+                                          const LLSD& message)
+{
+    dispatchMessage(msg_name, message, LLHTTPNode::ResponsePtr());
+}
+
+std::string MkoPluginManager::getSettingsFilePath() const
+{
+    return gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "mko_settings.xml");
+}
+
+void MkoPluginManager::loadSettings()
+{
+    std::string path = getSettingsFilePath();
+    if (!gDirUtilp->fileExists(path))
+    {
+        return;
+    }
+
+    std::ifstream ifs(path);
+    if (!ifs.is_open())
+    {
+        LL_WARNS("MkoPlugin") << "Could not open settings file " << path << LL_ENDL;
+        return;
+    }
+
+    LLSD data;
+    LLSDSerialize::fromXML(data, ifs, false);
+    if (data.isMap())
+    {
+        std::lock_guard<std::mutex> lock(mSettingsMutex);
+        for (LLSD::map_const_iterator it = data.beginMap(); it != data.endMap(); ++it)
+        {
+            mSettings[it->first] = it->second.asString();
+        }
+    }
+}
+
+void MkoPluginManager::saveSettings()
+{
+    std::string path = getSettingsFilePath();
+
+    LLSD data(LLSD::emptyMap());
+    {
+        std::lock_guard<std::mutex> lock(mSettingsMutex);
+        for (const auto& kv : mSettings)
+        {
+            data[kv.first] = kv.second;
+        }
+    }
+
+    std::ofstream ofs(path, std::ios::out | std::ios::binary);
+    if (ofs.is_open())
+    {
+        LLSDSerialize::toXML(data, ofs);
+    }
+    else
+    {
+        LL_WARNS("MkoPlugin") << "Could not write settings file " << path << LL_ENDL;
+    }
+}
+
+int MkoPluginManager::getSetting(const char* name, char* out, size_t out_len)
+{
+    if (!name || !out || out_len == 0) return -1;
+    MkoPluginManager& self = instance();
+    std::lock_guard<std::mutex> lock(self.mSettingsMutex);
+    auto it = self.mSettings.find(name);
+    if (it == self.mSettings.end())
+    {
+        return -1;
+    }
+    snprintf(out, out_len, "%s", it->second.c_str());
+    out[out_len - 1] = '\0';
+    return 0;
+}
+
+int MkoPluginManager::setSetting(const char* name, const char* value)
+{
+    if (!name || !value) return -1;
+    MkoPluginManager& self = instance();
+    {
+        std::lock_guard<std::mutex> lock(self.mSettingsMutex);
+        self.mSettings[name] = value;
+    }
+    self.saveSettings();
+    return 0;
+}
+
+int MkoPluginManager::registerSetting(const char* name, const char* default_value,
+                                      const char* label, const char* type)
+{
+    if (!name || !default_value || !label || !type) return -1;
+    MkoPluginManager& self = instance();
+    std::lock_guard<std::mutex> lock(self.mSettingsMutex);
+    if (self.mSettings.find(name) == self.mSettings.end())
+    {
+        self.mSettings[name] = default_value;
+    }
+    MkoSettingDef def;
+    def.default_value = default_value;
+    def.label = label;
+    def.type = type;
+    self.mRegistry[name] = def;
+    return 0;
+}
+
+int MkoPluginManager::hostGetSetting(const char* name, char* out, size_t out_len)
+{
+    return getSetting(name, out, out_len);
+}
+
+int MkoPluginManager::hostSetSetting(const char* name, const char* value)
+{
+    return setSetting(name, value);
+}
+
+int MkoPluginManager::hostRegisterSetting(const char* name, const char* default_value,
+                                          const char* label, const char* type)
+{
+    return registerSetting(name, default_value, label, type);
 }

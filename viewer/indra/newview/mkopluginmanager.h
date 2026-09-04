@@ -11,10 +11,19 @@
 
 #include <vector>
 #include <string>
+#include <map>
+#include <mutex>
 
 #include "llsd.h"
 #include "llhttpnode.h"
 #include "mko_plugin_api.h"
+
+struct MkoSettingDef
+{
+    std::string label;
+    std::string type;
+    std::string default_value;
+};
 
 class MkoPluginManager
 {
@@ -27,6 +36,15 @@ public:
     static bool dispatchMessage(const std::string& msg_name,
                                 const LLSD& message,
                                 LLHTTPNode::ResponsePtr responsep);
+
+    // Broadcast a message to all loaded protocol plugins.
+    void broadcastToPlugins(const std::string& msg_name, const LLSD& message);
+
+    // Plugin-accessible settings (UI can be added later; this is the backend).
+    static int getSetting(const char* name, char* out, size_t out_len);
+    static int setSetting(const char* name, const char* value);
+    static int registerSetting(const char* name, const char* default_value,
+                               const char* label, const char* type);
 
 private:
     MkoPluginManager() = default;
@@ -57,6 +75,18 @@ private:
     static const char* hostGetPluginDir(void);
     static void hostShowNotification(const char* message);
     static void hostChat(const char* message, int chat_type);
+    static int hostGetSetting(const char* name, char* out, size_t out_len);
+    static int hostSetSetting(const char* name, const char* value);
+    static int hostRegisterSetting(const char* name, const char* default_value,
+                                   const char* label, const char* type);
+
+    std::string getSettingsFilePath() const;
+    void loadSettings();
+    void saveSettings();
+
+    std::map<std::string, std::string> mSettings;
+    std::map<std::string, MkoSettingDef> mRegistry;
+    std::mutex mSettingsMutex;
 };
 
 #endif /* MKO_PLUGIN_MANAGER_H */

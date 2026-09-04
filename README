@@ -1,0 +1,54 @@
+# Manikineko Online Viewer
+
+Phoenix Firestorm–based open-source viewer code for Manikineko Online.
+
+---
+
+## Disclaimers
+
+**This is not Firestorm.**  
+Manikineko Online is **not** affiliated with, endorsed by, or associated with the Phoenix Firestorm Project, Firestorm Viewer, Second Life, or Linden Lab.
+
+**This repository is only the open-source viewer code.**  
+Proprietary or third-party code that we do not have the right to release is kept out of this tree. A **plugin / link-only** system is used so that such components are not mixed into Firestorm-derived sources and **do not affect compilation** of this viewer.
+
+**Name and branding**  
+You may **not** use our name, company name, marks, or any implication of endorsement except as required for ordinary source attribution / credits. Using “Manikineko,” “Manikineko Online,” or related names as if this project were official Firestorm or Second Life software is not allowed.
+
+**Ownership**  
+We do not own Second Life, Linden Lab, or the Phoenix Firestorm Project. Those names belong to their respective owners.
+
+**Status and warranty**  
+This viewer is **unfinished**. The code is provided **as-is**, to the extent permitted by the applicable open-source license (GPL and any other licenses that apply to included files). There is no warranty of merchantability, fitness for a particular purpose, or that the software is complete, stable, or suitable for production use.
+
+---
+
+## What this repo is
+
+- Open-source viewer sources derived from Phoenix Firestorm.
+- Intended as the compilable core of the Manikineko Online viewer.
+- Plugins that cannot be open-sourced live outside this tree (link-only; they are not required to build this code).
+
+## What this repo is not
+
+- Not official Firestorm.
+- Not a Second Life / Linden Lab product.
+- Not a complete, finished client.
+- Not a license to use Manikineko branding beyond credits.
+
+## License
+
+Follow the licenses already in this tree (primarily **GPL** for Firestorm-derived code, plus notices for third-party libraries).  
+“As-is” means we do not add extra guarantees beyond what those licenses already allow or require.
+
+If you redistribute, keep copyright notices, license texts, and do not present the result as Firestorm, Second Life, or an official Manikineko-endorsed product unless you have written permission.
+
+## Credits
+
+Phoenix Firestorm Project and its contributors — for the upstream viewer this work is based on.  
+Linden Lab — Second Life® and related marks are theirs.  
+Manikineko Online — this packaging and plugin boundary only.
+
+---
+
+*Use at your own risk. Unfinished software. Not affiliated with Firestorm or Second Life.*

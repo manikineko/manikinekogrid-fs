@@ -6344,6 +6344,48 @@ void LLAppViewer::idle()
         }
     }
 
+    // Broadcast viewer state to Mko plugins (Discord rich presence, etc.)
+    {
+        static LLTimer mko_broadcast_timer;
+        if (mko_broadcast_timer.getElapsedTimeF32() > 5.0f)
+        {
+            mko_broadcast_timer.reset();
+
+            std::string text;
+            if (gAgent.getID().isNull())
+            {
+                text = "logged_in=false";
+            }
+            else
+            {
+                text = "logged_in=true";
+
+                LLAvatarName av_name;
+                if (LLAvatarNameCache::get(gAgent.getID(), &av_name))
+                {
+                    text += "|display_name=" + av_name.getDisplayName();
+                    text += "|user_name=" + av_name.getUserName();
+                }
+
+                text += "|grid=" + LLGridManager::getInstance()->getGridLabel();
+
+                if (gAgent.getRegion())
+                {
+                    text += "|region=" + gAgent.getRegion()->getName();
+                }
+
+                LLVector3 pos = gAgent.getPositionAgent();
+                text += "|pos_x=" + std::to_string((S32)(pos.mV[VX] + 0.5f));
+                text += "|pos_y=" + std::to_string((S32)(pos.mV[VY] + 0.5f));
+                text += "|pos_z=" + std::to_string((S32)(pos.mV[VZ] + 0.5f));
+            }
+
+            LLSD info;
+            info["text"] = text;
+            MkoPluginManager::instance().broadcastToPlugins("MkoViewerInfo", info);
+        }
+    }
+
     // Handle shutdown process, for example,
     // wait for floaters to close, send quit message,
     // forcibly quit if it has taken too long
@@ -7288,7 +7330,7 @@ void LLAppViewer::initDiscordSocial()
     gDiscordPartyMaxSize = 0;
     gDiscordTimestampsStart = time(nullptr);
     gDiscordClient = std::make_shared<discordpp::Client>();
-    gDiscordClient->SetApplicationId(1394782217405862001);
+    gDiscordClient->SetApplicationId(1263849976069623861);
     updateDiscordActivity();
 }
 
