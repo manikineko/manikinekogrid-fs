@@ -929,11 +929,8 @@ void FSPanelLogin::loadLoginPage()
     // skin
     params["skin"] = gSavedSettings.getString("FSInternalSkinCurrent") + " " + gSavedSettings.getString("FSInternalSkinCurrentTheme");
 
-    // No version popup
-    if (gSavedSettings.getBOOL("FSNoVersionPopup"))
-    {
-        params["noversionpopup"] = "true";
-    }
+    // No version popup - always disabled
+    params["noversionpopup"] = "true";
 
 	// Splash screen settings
 	static const std::pair<std::string, std::string> mappings[] = {

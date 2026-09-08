@@ -733,6 +733,13 @@ ${If} ${ISOPENSIM} == "1"
   WriteRegStr HKEY_CLASSES_ROOT "hop\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
   WriteRegExpandStr HKEY_CLASSES_ROOT "hop\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
   WriteRegStr HKEY_CLASSES_ROOT "hop\shell\open" "FriendlyAppName" "$FRIENDLY_APP_NAME"
+
+  # Manikineko grid protocol
+  WriteRegStr HKEY_CLASSES_ROOT "manikineko" "(default)" "URL:Manikineko Grid"
+  WriteRegStr HKEY_CLASSES_ROOT "manikineko" "URL Protocol" ""
+  WriteRegStr HKEY_CLASSES_ROOT "manikineko\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
+  WriteRegExpandStr HKEY_CLASSES_ROOT "manikineko\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
+  WriteRegStr HKEY_CLASSES_ROOT "manikineko\shell\open" "FriendlyAppName" "$FRIENDLY_APP_NAME"
 ${EndIf}
 # </FS:CR>
 
@@ -1131,6 +1138,8 @@ DeleteKeys:
   ${If} ${ISOPENSIM} == "1"
     DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\hop"
     DeleteRegKey HKEY_CLASSES_ROOT "hop"
+    DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\manikineko"
+    DeleteRegKey HKEY_CLASSES_ROOT "manikineko"
   ${EndIf}
   # </FS:Ansariel>
 

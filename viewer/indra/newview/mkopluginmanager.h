@@ -16,6 +16,8 @@
 
 #include "llsd.h"
 #include "llhttpnode.h"
+#include "llgl.h"
+#include "llshadermgr.h"
 #include "mko_plugin_api.h"
 
 struct MkoSettingDef
@@ -23,6 +25,16 @@ struct MkoSettingDef
     std::string label;
     std::string type;
     std::string default_value;
+    std::string tab_id;   /* empty = default "plugins" tab */
+    std::string options;  /* pipe-separated enum options */
+    double min_value = 0.0;
+    double max_value = 0.0;
+};
+
+struct MkoSettingsTab
+{
+    std::string id;
+    std::string label;
 };
 
 class MkoPluginManager
@@ -40,11 +52,25 @@ public:
     // Broadcast a message to all loaded protocol plugins.
     void broadcastToPlugins(const std::string& msg_name, const LLSD& message);
 
-    // Plugin-accessible settings (UI can be added later; this is the backend).
+    // Plugin-accessible settings (Preferences > Graphics > plugin tabs).
     static int getSetting(const char* name, char* out, size_t out_len);
     static int setSetting(const char* name, const char* value);
     static int registerSetting(const char* name, const char* default_value,
                                const char* label, const char* type);
+    static int registerSettingsTab(const char* id, const char* label);
+    static int registerSetting2(const MkoSettingDesc2* setting);
+    static const char* getGraphicsInfo(void);
+
+    // UI entry points (used by the Preferences plugin-settings panel).
+    static int setSettingFromUI(const char* name, const char* value);
+    std::vector<MkoSettingsTab> getSettingsTabs() const;
+    void getSettingsForTab(const std::string& tab_id,
+                           std::vector<std::pair<std::string, MkoSettingDef> >& out) const;
+
+    // Shader override registration (called from the plugin API).
+    static int registerShader(const MkoShaderDesc* desc);
+    static int unregisterShader(const char* name, MkoShaderType type);
+    std::string getShaderSource(const std::string& name, GLenum type) const;
 
 private:
     MkoPluginManager() = default;
@@ -79,6 +105,11 @@ private:
     static int hostSetSetting(const char* name, const char* value);
     static int hostRegisterSetting(const char* name, const char* default_value,
                                    const char* label, const char* type);
+    static int hostRegisterSettingsTab(const MkoSettingsTabDesc* tab);
+    static int hostRegisterSetting2(const MkoSettingDesc2* setting);
+    static const char* hostGetGraphicsInfo(void);
+    static int hostRegisterShader(const MkoShaderDesc* desc);
+    static int hostUnregisterShader(const char* name, MkoShaderType type);
 
     std::string getSettingsFilePath() const;
     void loadSettings();
@@ -86,7 +117,11 @@ private:
 
     std::map<std::string, std::string> mSettings;
     std::map<std::string, MkoSettingDef> mRegistry;
-    std::mutex mSettingsMutex;
+    std::vector<MkoSettingsTab> mTabs;
+    mutable std::mutex mSettingsMutex;
+
+    std::map<std::string, std::string> mShaderOverrides;
+    mutable std::mutex mShaderMutex;
 };
 
 #endif /* MKO_PLUGIN_MANAGER_H */

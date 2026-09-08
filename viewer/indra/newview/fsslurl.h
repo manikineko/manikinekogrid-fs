@@ -47,6 +47,7 @@ public:
     static const char* SECONDLIFE_COM;
     static const char* MAPS_SECONDLIFE_COM;
     static const char* SLURL_X_GRID_LOCATION_INFO_SCHEME;
+    static const char* MANIKINEKO_SCHEME;
     static LLSLURL START_LOCATION;
     static const char* SIM_LOCATION_HOME;
     static const char* SIM_LOCATION_LAST;

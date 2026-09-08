@@ -132,8 +132,52 @@ static int l_register_setting(lua_State* L)
     const char* default_value = luaL_checkstring(L, 2);
     const char* label = luaL_checkstring(L, 3);
     const char* type = luaL_checkstring(L, 4);
+
+    if (lua_gettop(L) > 4)
+    {
+        // Extended form:
+        //   register_setting(name, default, label, type[, tab_id[, options[, min, max]]])
+        MkoSettingDesc2 desc;
+        desc.name = name;
+        desc.default_value = default_value;
+        desc.label = label;
+        desc.type = type;
+        desc.tab_id = lua_isstring(L, 5) ? lua_tostring(L, 5) : nullptr;
+        desc.options = lua_isstring(L, 6) ? lua_tostring(L, 6) : nullptr;
+        desc.min_value = (lua_gettop(L) >= 7 && lua_isnumber(L, 7)) ? lua_tonumber(L, 7) : 0.0;
+        desc.max_value = (lua_gettop(L) >= 8 && lua_isnumber(L, 8)) ? lua_tonumber(L, 8) : 0.0;
+        int r = sHost->register_setting2(&desc);
+        lua_pushboolean(L, r == 0);
+        return 1;
+    }
+
     int r = sHost->register_setting(name, default_value, label, type);
     lua_pushboolean(L, r == 0);
+    return 1;
+}
+
+static int l_register_settings_tab(lua_State* L)
+{
+    if (!sHost) return 0;
+    const char* id = luaL_checkstring(L, 1);
+    const char* label = luaL_checkstring(L, 2);
+    MkoSettingsTabDesc tab;
+    tab.id = id;
+    tab.label = label;
+    int r = sHost->register_settings_tab(&tab);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
+static int l_get_graphics_info(lua_State* L)
+{
+    if (!sHost || !sHost->get_graphics_info)
+    {
+        lua_pushnil(L);
+        return 1;
+    }
+    const char* info = sHost->get_graphics_info();
+    lua_pushstring(L, info ? info : "");
     return 1;
 }
 
@@ -151,6 +195,56 @@ static int l_register_on_message(lua_State* L)
     return 0;
 }
 
+static int l_register_shader(lua_State* L)
+{
+    if (!sHost)
+    {
+        lua_pushboolean(L, false);
+        return 1;
+    }
+
+    const char* name = luaL_checkstring(L, 1);
+
+    MkoShaderType type = MKO_SHADER_FRAGMENT;
+    if (lua_isnumber(L, 2))
+    {
+        int t = (int)lua_tointeger(L, 2);
+        if (t >= 0 && t < MKO_SHADER_COUNT)
+        {
+            type = (MkoShaderType)t;
+        }
+    }
+    else if (lua_isstring(L, 2))
+    {
+        const char* ts = lua_tostring(L, 2);
+        if (strcmp(ts, "vertex") == 0 || strcmp(ts, "v") == 0 || strcmp(ts, "vert") == 0)
+        {
+            type = MKO_SHADER_VERTEX;
+        }
+        else if (strcmp(ts, "geometry") == 0 || strcmp(ts, "g") == 0 || strcmp(ts, "geom") == 0)
+        {
+            type = MKO_SHADER_GEOMETRY;
+        }
+        else
+        {
+            type = MKO_SHADER_FRAGMENT;
+        }
+    }
+
+    const char* source = luaL_checkstring(L, 3);
+    const char* defines = luaL_optstring(L, 4, NULL);
+
+    MkoShaderDesc desc;
+    desc.name = name;
+    desc.type = type;
+    desc.source = source;
+    desc.defines = defines;
+
+    int r = sHost->register_shader(&desc);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
 static void register_mko_table(lua_State* L)
 {
     lua_newtable(L);
@@ -163,7 +257,10 @@ static void register_mko_table(lua_State* L)
     lua_pushcfunction(L, l_get_setting);  lua_setfield(L, -2, "get_setting");
     lua_pushcfunction(L, l_set_setting);  lua_setfield(L, -2, "set_setting");
     lua_pushcfunction(L, l_register_setting); lua_setfield(L, -2, "register_setting");
+    lua_pushcfunction(L, l_register_settings_tab); lua_setfield(L, -2, "register_settings_tab");
+    lua_pushcfunction(L, l_get_graphics_info); lua_setfield(L, -2, "get_graphics_info");
     lua_pushcfunction(L, l_register_on_message); lua_setfield(L, -2, "register_on_message");
+    lua_pushcfunction(L, l_register_shader); lua_setfield(L, -2, "register_shader");
     lua_setglobal(L, "mko");
 }
 

@@ -1309,6 +1309,9 @@ void velopack_check_for_updates(const std::string& required_version, const std::
         return;
     }
 
+    LL_INFOS("Velopack") << "Update checking disabled" << LL_ENDL;
+    return;
+
     // Allow downgrades only for rollbacks: VVM requires a version that's
     // strictly lower than what we're running (e.g., a retracted build).
     bool has_required = !required_version.empty();

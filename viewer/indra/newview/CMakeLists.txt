@@ -939,6 +939,7 @@ else (OPENSIM)
 endif (OPENSIM)
 
 list(APPEND viewer_SOURCE_FILES mkopluginmanager.cpp)
+list(APPEND viewer_SOURCE_FILES llpanelpluginsettings.cpp)
 
 # <Mko> Optional Lua plugin add-on (libmkolua). Built only when Lua is found.
 option(MKO_WITH_LUA "Build the Manikineko Lua plugin add-on (libmkolua)" ON)
@@ -1822,7 +1823,7 @@ set(viewer_GLTF_HEADER_FILES
     )
 
 source_group("Header Files\\GLTF" FILES ${viewer_GLTF_HEADER_FILES})
-list(APPEND viewer_HEADER_FILES ${viewer_GLTF_HEADER_FILES} mkopluginmanager.h mko_plugin_api.h)
+list(APPEND viewer_HEADER_FILES ${viewer_GLTF_HEADER_FILES} mkopluginmanager.h mko_plugin_api.h llpanelpluginsettings.h)
 # </FS:Ansariel> Group GLTF files into their subfolders
 
 if (USE_BUGSPLAT)

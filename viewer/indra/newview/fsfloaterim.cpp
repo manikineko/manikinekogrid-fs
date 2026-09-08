@@ -1060,19 +1060,7 @@ bool FSFloaterIM::postBuild()
     //But we cannot with the support group button, because testing groups are also support groups
     childSetVisible("support_panel", isFSSupportGroup && !isFSTestingGroup);
 
-    // <FS:Zi> Viewer version popup
-    if (isFSSupportGroup || isFSTestingGroup)
-    {
-        // check if the dialog was set to ignore
-        LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate("FirstJoinSupportGroup2");
-        if (!templatep.get()->mForm->getIgnored())
-        {
-            // if not, give the user a choice, whether to enable the version prefix or not
-            LLSD args;
-            LLNotificationsUtil::add("FirstJoinSupportGroup2", args, LLSD(), boost::bind(&FSFloaterIM::enableViewerVersionCallback, this, _1, _2));
-        }
-    }
-    // </FS:Zi> Viewer version popup
+    // Viewer version popup removed
 
     // only dock when chiclets are visible, or the floater will get stuck in the top left
     // FIRE-9984 -Zi

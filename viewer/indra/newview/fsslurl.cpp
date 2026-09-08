@@ -43,6 +43,7 @@ const char* LLSLURL::SLURL_HTTP_SCHEME       = "http";
 const char* LLSLURL::SLURL_HTTPS_SCHEME      = "https";
 const char* LLSLURL::SLURL_SECONDLIFE_SCHEME     = "secondlife";
 const char* LLSLURL::SLURL_X_GRID_LOCATION_INFO_SCHEME = "x-grid-location-info";
+const char* LLSLURL::MANIKINEKO_SCHEME           = "manikineko";
 
 // For DnD - even though www.slurl.com redirects to slurl.com in a browser, you  can copy and drag
 // text with www.slurl.com or a link explicitly pointing at www.slurl.com so testing for this
@@ -145,14 +146,31 @@ LLSLURL::LLSLURL(const std::string& slurl)
         // At the end of this if/else block, we'll have determined the grid,
         // and the slurl type (APP or LOCATION)
 
-        // default to current
-        std::string default_grid = LLGridManager::getInstance()->getGrid();
+        // default to current, or to the Manikineko grid for manikineko:// links
+        std::string default_grid;
+        if (slurl_uri.scheme() == LLSLURL::MANIKINEKO_SCHEME)
+        {
+            default_grid = "grid.manikineko.nl:8002";
+            if (!LLGridManager::getInstance()->hasGrid(default_grid))
+            {
+                std::string by_nick = LLGridManager::getInstance()->getGridByGridNick("manikineko");
+                if (!by_nick.empty())
+                {
+                    default_grid = by_nick;
+                }
+            }
+        }
+        else
+        {
+            default_grid = LLGridManager::getInstance()->getGrid();
+        }
         mGrid = default_grid;
         LL_DEBUGS("SLURL") << "default grid: " << default_grid << LL_ENDL;
 
-        if(slurl_uri.scheme() == LLSLURL::SLURL_SECONDLIFE_SCHEME)
+        if(slurl_uri.scheme() == LLSLURL::SLURL_SECONDLIFE_SCHEME
+           || slurl_uri.scheme() == LLSLURL::MANIKINEKO_SCHEME)
         {
-            LL_DEBUGS("SLURL") << "secondlife scheme" << LL_ENDL;
+            LL_DEBUGS("SLURL") << "secondlife/manikineko scheme" << LL_ENDL;
             if (path_array.size() == 0
                 && slurl_uri.authority().empty()
                 && slurl_uri.escapedQuery().empty())

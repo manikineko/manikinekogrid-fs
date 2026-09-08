@@ -14,6 +14,8 @@
 #include "llnotificationsutil.h"
 #include "fsnearbychathub.h"
 #include "llchat.h"
+#include "llviewercontrol.h"
+#include "llviewershadermgr.h"
 
 #include <sstream>
 #include <fstream>
@@ -52,6 +54,11 @@ void MkoPluginManager::init()
     sHostInterface.get_setting = &MkoPluginManager::hostGetSetting;
     sHostInterface.set_setting = &MkoPluginManager::hostSetSetting;
     sHostInterface.register_setting = &MkoPluginManager::hostRegisterSetting;
+    sHostInterface.register_settings_tab = &MkoPluginManager::hostRegisterSettingsTab;
+    sHostInterface.register_setting2 = &MkoPluginManager::hostRegisterSetting2;
+    sHostInterface.get_graphics_info = &MkoPluginManager::hostGetGraphicsInfo;
+    sHostInterface.register_shader = &MkoPluginManager::hostRegisterShader;
+    sHostInterface.unregister_shader = &MkoPluginManager::hostUnregisterShader;
 
     loadSettings();
 
@@ -59,6 +66,13 @@ void MkoPluginManager::init()
     LLMessageSystem::setDispatchInterceptor(&MkoPluginManager::dispatchMessage);
 
     loadPlugins();
+
+    // Forward shader override requests from the rendering pipeline.
+    LLShaderMgr::setShaderSourceOverride(
+        std::bind(&MkoPluginManager::getShaderSource,
+                  &instance(),
+                  std::placeholders::_1,
+                  std::placeholders::_2));
 }
 
 void MkoPluginManager::shutdown()
@@ -72,6 +86,38 @@ bool MkoPluginManager::dispatchMessage(const std::string& msg_name,
                                        const LLSD& message,
                                        LLHTTPNode::ResponsePtr responsep)
 {
+    // Internal control messages that the host handles directly.
+    if (msg_name == "MkoReloadShaders")
+    {
+        LL_INFOS("MkoPlugin") << "Reloading shaders via plugin request" << LL_ENDL;
+        LLViewerShaderMgr::instance()->setShaders();
+        return true;
+    }
+
+    if (msg_name == "MkoClearShaderOverrides")
+    {
+        LL_INFOS("MkoPlugin") << "Clearing shader overrides via plugin request" << LL_ENDL;
+        {
+            MkoPluginManager& self = instance();
+            std::lock_guard<std::mutex> lock(self.mShaderMutex);
+            self.mShaderOverrides.clear();
+        }
+        LLViewerShaderMgr::instance()->setShaders();
+        return true;
+    }
+
+    if (msg_name == "MkoSetSavedSetting")
+    {
+        if (message.has("name") && message.has("value"))
+        {
+            const std::string name = message["name"].asString();
+            const LLSD value = message["value"];
+            LL_INFOS("MkoPlugin") << "Setting gSavedSettings['" << name << "'] from plugin" << LL_ENDL;
+            gSavedSettings.setUntypedValue(name, value);
+        }
+        return true;
+    }
+
     MkoPluginManager& self = instance();
     if (self.mPlugins.empty())
     {
@@ -397,22 +443,120 @@ int MkoPluginManager::setSetting(const char* name, const char* value)
     return 0;
 }
 
+int MkoPluginManager::setSettingFromUI(const char* name, const char* value)
+{
+    int r = setSetting(name, value);
+    if (r == 0)
+    {
+        LLSD msg;
+        msg["name"] = std::string(name);
+        msg["value"] = std::string(value);
+        instance().broadcastToPlugins("MkoSettingChanged", msg);
+    }
+    return r;
+}
+
 int MkoPluginManager::registerSetting(const char* name, const char* default_value,
                                       const char* label, const char* type)
 {
-    if (!name || !default_value || !label || !type) return -1;
+    MkoSettingDesc2 desc;
+    desc.name = name;
+    desc.default_value = default_value;
+    desc.label = label;
+    desc.type = type;
+    desc.tab_id = nullptr;
+    desc.options = nullptr;
+    desc.min_value = 0.0;
+    desc.max_value = 0.0;
+    return registerSetting2(&desc);
+}
+
+int MkoPluginManager::registerSettingsTab(const char* id, const char* label)
+{
+    if (!id || !label) return -1;
     MkoPluginManager& self = instance();
     std::lock_guard<std::mutex> lock(self.mSettingsMutex);
-    if (self.mSettings.find(name) == self.mSettings.end())
+    for (const MkoSettingsTab& tab : self.mTabs)
     {
-        self.mSettings[name] = default_value;
+        if (tab.id == id)
+        {
+            return 0; // already registered
+        }
+    }
+    MkoSettingsTab tab;
+    tab.id = id;
+    tab.label = label;
+    self.mTabs.push_back(tab);
+    LL_INFOS("MkoPlugin") << "Registered settings tab '" << id << "' (" << label << ")" << LL_ENDL;
+    return 0;
+}
+
+int MkoPluginManager::registerSetting2(const MkoSettingDesc2* desc)
+{
+    if (!desc || !desc->name || !desc->default_value || !desc->label || !desc->type) return -1;
+    MkoPluginManager& self = instance();
+    std::lock_guard<std::mutex> lock(self.mSettingsMutex);
+    if (self.mSettings.find(desc->name) == self.mSettings.end())
+    {
+        self.mSettings[desc->name] = desc->default_value;
     }
     MkoSettingDef def;
-    def.default_value = default_value;
-    def.label = label;
-    def.type = type;
-    self.mRegistry[name] = def;
+    def.default_value = desc->default_value;
+    def.label = desc->label;
+    def.type = desc->type;
+    def.tab_id = desc->tab_id ? desc->tab_id : "";
+    def.options = desc->options ? desc->options : "";
+    def.min_value = desc->min_value;
+    def.max_value = desc->max_value;
+    self.mRegistry[desc->name] = def;
     return 0;
+}
+
+std::vector<MkoSettingsTab> MkoPluginManager::getSettingsTabs() const
+{
+    std::lock_guard<std::mutex> lock(mSettingsMutex);
+    std::vector<MkoSettingsTab> tabs = mTabs;
+    // Always offer the default tab for legacy (tab-less) settings.
+    bool has_default = false;
+    for (const MkoSettingsTab& tab : tabs)
+    {
+        if (tab.id == "plugins") has_default = true;
+    }
+    if (!has_default)
+    {
+        MkoSettingsTab def;
+        def.id = "plugins";
+        def.label = "Plugins";
+        tabs.push_back(def);
+    }
+    return tabs;
+}
+
+void MkoPluginManager::getSettingsForTab(const std::string& tab_id,
+                                         std::vector<std::pair<std::string, MkoSettingDef> >& out) const
+{
+    std::lock_guard<std::mutex> lock(mSettingsMutex);
+    for (const auto& kv : mRegistry)
+    {
+        std::string setting_tab = kv.second.tab_id.empty() ? "plugins" : kv.second.tab_id;
+        if (setting_tab == tab_id)
+        {
+            out.push_back(kv);
+        }
+    }
+}
+
+const char* MkoPluginManager::getGraphicsInfo(void)
+{
+    static std::string s_info;
+    LLSD info;
+    info["vendor"] = std::string(gGLManager.mGLVendor);
+    info["renderer"] = std::string(gGLManager.mGLRenderer);
+    info["version"] = std::string(gGLManager.mGLVersionString);
+    std::ostringstream ostr;
+    LLSDSerialize::serialize(info, ostr, LLSDSerialize::LLSD_NOTATION);
+    s_info = ostr.str();
+    return s_info.c_str();
 }
 
 int MkoPluginManager::hostGetSetting(const char* name, char* out, size_t out_len)
@@ -422,11 +566,124 @@ int MkoPluginManager::hostGetSetting(const char* name, char* out, size_t out_len
 
 int MkoPluginManager::hostSetSetting(const char* name, const char* value)
 {
-    return setSetting(name, value);
+    int r = setSetting(name, value);
+    if (r == 0)
+    {
+        LLSD msg;
+        msg["name"] = std::string(name);
+        msg["value"] = std::string(value);
+        instance().broadcastToPlugins("MkoSettingChanged", msg);
+    }
+    return r;
 }
 
 int MkoPluginManager::hostRegisterSetting(const char* name, const char* default_value,
                                           const char* label, const char* type)
 {
     return registerSetting(name, default_value, label, type);
+}
+
+int MkoPluginManager::hostRegisterSettingsTab(const MkoSettingsTabDesc* tab)
+{
+    if (!tab || !tab->id || !tab->label) return -1;
+    return registerSettingsTab(tab->id, tab->label);
+}
+
+int MkoPluginManager::hostRegisterSetting2(const MkoSettingDesc2* setting)
+{
+    return registerSetting2(setting);
+}
+
+const char* MkoPluginManager::hostGetGraphicsInfo(void)
+{
+    return getGraphicsInfo();
+}
+
+int MkoPluginManager::hostRegisterShader(const MkoShaderDesc* desc)
+{
+    return registerShader(desc);
+}
+
+int MkoPluginManager::hostUnregisterShader(const char* name, MkoShaderType type)
+{
+    return unregisterShader(name, type);
+}
+
+int MkoPluginManager::unregisterShader(const char* name, MkoShaderType type)
+{
+    if (!name) return -1;
+
+    GLenum gltype = 0;
+    switch (type)
+    {
+        case MKO_SHADER_VERTEX:   gltype = GL_VERTEX_SHADER;   break;
+        case MKO_SHADER_FRAGMENT: gltype = GL_FRAGMENT_SHADER; break;
+        case MKO_SHADER_GEOMETRY: gltype = GL_GEOMETRY_SHADER; break;
+        default:
+            return -1;
+    }
+
+    std::string key = std::string(name) + ":" + std::to_string(gltype);
+    MkoPluginManager& self = instance();
+    {
+        std::lock_guard<std::mutex> lock(self.mShaderMutex);
+        self.mShaderOverrides.erase(key);
+    }
+
+    LL_INFOS("MkoPlugin") << "Unregistered shader override " << name << LL_ENDL;
+    return 0;
+}
+
+int MkoPluginManager::registerShader(const MkoShaderDesc* desc)
+{
+    if (!desc || !desc->name || !desc->source)
+    {
+        return -1;
+    }
+
+    GLenum gltype = 0;
+    switch (desc->type)
+    {
+        case MKO_SHADER_VERTEX:   gltype = GL_VERTEX_SHADER;   break;
+        case MKO_SHADER_FRAGMENT: gltype = GL_FRAGMENT_SHADER; break;
+        case MKO_SHADER_GEOMETRY: gltype = GL_GEOMETRY_SHADER; break;
+        default:
+            return -1;
+    }
+
+    std::string source;
+    if (desc->defines)
+    {
+        source = desc->defines;
+        if (!source.empty() && source.back() != '\n')
+        {
+            source += '\n';
+        }
+    }
+    source += desc->source;
+
+    std::string key = std::string(desc->name) + ":" + std::to_string(gltype);
+
+    MkoPluginManager& self = instance();
+    {
+        std::lock_guard<std::mutex> lock(self.mShaderMutex);
+        self.mShaderOverrides[key] = source;
+    }
+
+    LL_INFOS("MkoPlugin") << "Registered shader override " << desc->name
+                          << " (type=" << gltype << ")" << LL_ENDL;
+    return 0;
+}
+
+std::string MkoPluginManager::getShaderSource(const std::string& name, GLenum type) const
+{
+    std::string key = name + ":" + std::to_string(type);
+    std::lock_guard<std::mutex> lock(mShaderMutex);
+    auto it = mShaderOverrides.find(key);
+    if (it != mShaderOverrides.end())
+    {
+        LL_DEBUGS("MkoPlugin") << "Shader override found for " << name << LL_ENDL;
+        return it->second;
+    }
+    return std::string();
 }
