@@ -54,6 +54,7 @@ LLSpinCtrl::Params::Params()
     allow_text_entry("allow_text_entry", true),
     allow_digits_only("allow_digits_only", false),
     label_wrap("label_wrap", false),
+    reverse_buttons("reverse_buttons", false),
     text_enabled_color("text_enabled_color"),
     text_disabled_color("text_disabled_color"),
     up_button("up_button"),
@@ -66,6 +67,7 @@ LLSpinCtrl::LLSpinCtrl(const LLSpinCtrl::Params& p)
     mLabelBox(NULL),
     mbHasBeenSet( false ),
     mPrecision(p.decimal_digits),
+    mReverseButtons(p.reverse_buttons),
     mTextEnabledColor(p.text_enabled_color()),
     mTextDisabledColor(p.text_disabled_color())
 {
@@ -200,10 +202,9 @@ void LLSpinCtrl::onUpBtn( const LLSD& data )
             {
                 inc *= 0.01f;
             }
-            F32 val = cur_val + inc;
+            F32 val = cur_val + (mReverseButtons ? -inc : inc);
             // </FS:KC>
             val = clamp_precision(val, mPrecision);
-            val = llmin( val, mMaxValue );
             if (val < mMinValue) val = mMinValue;
             if (val > mMaxValue) val = mMaxValue;
 
@@ -249,11 +250,9 @@ void LLSpinCtrl::onDownBtn( const LLSD& data )
             {
                 inc *= 0.01f;
             }
-            F32 val = cur_val - inc;
+            F32 val = cur_val + (mReverseButtons ? inc : -inc);
             // </FS:KC>
             val = clamp_precision(val, mPrecision);
-            val = llmax( val, mMinValue );
-
             if (val < mMinValue) val = mMinValue;
             if (val > mMaxValue) val = mMaxValue;
 
