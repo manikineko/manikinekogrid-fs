@@ -1972,14 +1972,19 @@ void LLWindowSDL::gatherInput()
                 if (event.button.button == SDL_BUTTON_LEFT)  // left
                 {
                     if (isDoubleClick)
-                        mCallbacks->handleDoubleClick(this, openGlCoord, mask);
+                        mCallbacks->handleLeftMouseDoubleClick(this, openGlCoord, mask);
                     else
                         mCallbacks->handleMouseDown(this, openGlCoord, mask);
                 }
 
                 else if (event.button.button == SDL_BUTTON_RIGHT)  // right
                 {
-                    mCallbacks->handleRightMouseDown(this, openGlCoord, mask);
+                    // <FS:KC/> use the manual right-click tracking above to
+                    // detect a double right click
+                    if (isDoubleClick)
+                        mCallbacks->handleRightMouseDoubleClick(this, openGlCoord, mask);
+                    else
+                        mCallbacks->handleRightMouseDown(this, openGlCoord, mask);
                 }
 
                 else if (event.button.button == SDL_BUTTON_MIDDLE)  // middle
