@@ -154,6 +154,14 @@ void LLScriptEditor::initKeywords()
     mKeywords.initialize(LLSyntaxIdLSL::getInstance()->getKeywordsXML());
 }
 
+// <Mko> Load a specific keywords XML (e.g. OSSL) and re-segment the text.
+void LLScriptEditor::setSyntaxFile(const std::string& filename)
+{
+    mKeywords.initialize(filename);
+    loadKeywords();
+}
+// </Mko>
+
 void LLScriptEditor::loadKeywords()
 {
     LL_PROFILE_ZONE_SCOPED;

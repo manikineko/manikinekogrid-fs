@@ -370,6 +370,7 @@ class LLLiveLSLEditor : public LLScriptEdContainer
     friend class LLLiveLSLFile;
 public:
     LLLiveLSLEditor(const LLSD& key);
+    ~LLLiveLSLEditor();
 
 
     static void processScriptRunningReply(LLMessageSystem* msg, void**);

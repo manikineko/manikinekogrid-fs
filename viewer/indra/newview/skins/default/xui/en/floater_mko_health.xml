@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="mko_health"
+         title="Health & Region"
+         width="340"
+         height="330"
+         save_rect="true"
+         single_instance="true"
+         reuse_instance="false">
+  <text follows="left|top"
+        height="16"
+        layout="topleft"
+        left="10"
+        top_pad="10"
+        name="avatar_health_label"
+        width="200">
+    Avatar Health
+  </text>
+  <progress_bar follows="left|top|right"
+                height="18"
+                layout="topleft"
+                left="10"
+                top_pad="4"
+                name="health_bar"
+                width="320"/>
+  <text follows="left|top"
+        height="16"
+        layout="topleft"
+        left="10"
+        top_pad="4"
+        name="health_value"
+        width="320">
+    100 / 100
+  </text>
+  <text follows="left|top"
+        height="16"
+        layout="topleft"
+        left="10"
+        top_pad="10"
+        name="region_label"
+        width="320">
+    Region
+  </text>
+  <text follows="all"
+        height="180"
+        layout="topleft"
+        left="10"
+        top_pad="4"
+        name="region_stats"
+        width="320"
+        font="Monospace">
+    (no region)
+  </text>
+</floater>

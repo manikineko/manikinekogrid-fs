@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="mko_script_editor"
+         title="MKO Script Editor"
+         width="480"
+         height="140"
+         save_rect="true"
+         single_instance="false"
+         reuse_instance="false">
+  <text follows="left|right|top"
+        font="SansSerif"
+        h_pad="0"
+        height="60"
+        layout="topleft"
+        left="10"
+        top_pad="8"
+        name="status_text"
+        width="460"
+        wrap="true">
+    Launching external editor...
+  </text>
+  <button follows="left|bottom"
+          height="22"
+          label="Open Editor"
+          layout="topleft"
+          left="10"
+          bottom="10"
+          name="open_btn"
+          width="90"/>
+  <button follows="left|bottom"
+          height="22"
+          label="Save"
+          layout="topleft"
+          left_pad="8"
+          bottom="10"
+          name="save_btn"
+          width="70"/>
+  <button follows="left|bottom"
+          height="22"
+          label="Close"
+          layout="topleft"
+          left_pad="8"
+          bottom="10"
+          name="close_btn"
+          width="70"/>
+</floater>

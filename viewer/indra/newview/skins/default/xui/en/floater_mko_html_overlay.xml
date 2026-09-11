@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="mko_html_overlay"
+         title="MKO Overlay"
+         width="512"
+         height="384"
+         save_rect="false"
+         single_instance="false"
+         reuse_instance="false">
+  <web_browser follows="all"
+               left="4"
+               bottom="4"
+               width="504"
+               height="376"
+               name="browser"
+               border_visible="false"/>
+</floater>

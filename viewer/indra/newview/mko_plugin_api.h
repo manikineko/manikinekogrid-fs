@@ -29,7 +29,7 @@ extern "C" {
   #define MKO_PLUGIN_EXPORT
 #endif
 
-#define MKO_PLUGIN_API_VERSION 7
+#define MKO_PLUGIN_API_VERSION 8
 
 typedef enum
 {
@@ -79,6 +79,42 @@ typedef struct
     double max_value;            /* float/integer only: upper bound            */
 } MkoSettingDesc2;
 
+/* HTML overlay descriptor. A plugin can embed HTML content or a web
+ * page in the viewer as a lightweight floater rendered by the viewer's
+ * media (web) engine. Overlays are keyed by a stable id; re-registering
+ * an existing id updates it in place.
+ * If both url and html are given the url wins. */
+typedef struct
+{
+    const char* id;              /* stable overlay id, e.g. "grid-news"        */
+    const char* title;           /* floater title                             */
+    const char* url;             /* page to load, or NULL                     */
+    const char* html;            /* inline HTML to render, or NULL            */
+    int x;                       /* left position in px, -1 = auto-center     */
+    int y;                       /* top position in px, -1 = auto-center      */
+    int width;                   /* overlay size in px                        */
+    int height;                  /* overlay size in px                        */
+    double opacity;              /* floater opacity 0..1, <=0 = default       */
+    int visible;                 /* nonzero = show immediately               */
+    int closable;                /* nonzero = user may close the floater      */
+} MkoHtmlOverlayDesc;
+
+/* Message contract (delivered to every plugin's on_message):
+ *
+ * MkoScriptEditorSaved { "id", "language", "content" }
+ *     Sent when the user saves in the embedded script editor opened
+ *     via open_script_editor().
+ *
+ * MkoHttpResult { "url", "status", "body" }
+ *     Sent when an http_request() completes. "status" is the HTTP
+ *     status code (0 on transport failure).
+ *
+ * MkoSettingChanged { "name", "value" }
+ *     Sent when a plugin setting is changed (UI or API).
+ *
+ * MkoOverlayClosed { "id" }
+ *     Sent when the user closes an HTML overlay floater. */
+
 /* Forward declarations */
 typedef struct MkoHostInterface MkoHostInterface;
 typedef struct MkoPluginInterface MkoPluginInterface;
@@ -102,6 +138,23 @@ struct MkoHostInterface
     const char* (*get_graphics_info)(void); /* LLSD notation: vendor/renderer/glsl_version */
     int (*register_shader)(const MkoShaderDesc* desc);
     int (*unregister_shader)(const char* name, MkoShaderType type);
+    /* API v8: HTML overlay support */
+    int (*register_html_overlay)(const MkoHtmlOverlayDesc* desc);
+    int (*unregister_html_overlay)(const char* id);
+    int (*show_html_overlay)(const char* id, int visible);
+    int (*navigate_html_overlay)(const char* id, const char* url);
+    /* API v8: embedded script editor */
+    int (*open_script_editor)(const char* id, const char* title,
+                              const char* language, const char* content);
+    int (*close_script_editor)(const char* id);
+    /* API v8: health & region stats */
+    int (*get_avatar_health)(void);
+    int (*get_avatar_health_max)(void);
+    const char* (*get_region_stats)(void); /* LLSD notation */
+    /* API v8: async HTTP; the result is delivered to every plugin as
+     * message msg_name with an "MkoHttpResult" style payload. */
+    int (*http_request)(const char* url, const char* method,
+                        const char* body, const char* msg_name);
 };
 
 /* Plugin entry point. A plugin must export a function named

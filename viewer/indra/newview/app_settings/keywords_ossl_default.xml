@@ -1,0 +1,1338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<llsd>
+   <map>
+      <key>functions</key>
+      <map>
+         <key>osAdjustSoundVolume</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osAESDecrypt</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osAESDecryptFrom</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osAESEncrypt</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osAESEncryptTo</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osAgentSaveAppearance</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osAngleBetween</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osApproxEquals</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osAvatarName2Key</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osAvatarPlayAnimation</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osAvatarStopAnimation</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osAvatarType</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osCauseDamage</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osCauseHealing</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osCheckODE</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osClearInertia</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osClearObjectAnimations</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osCollisionSound</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osConsoleCommand</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDetectedCountry</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDie</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawEllipse</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawFilledEllipse</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawFilledPolygon</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawFilledRectangle</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawImage</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawLine</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawPolygon</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawRectangle</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawResetTransform</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawRotationTransform</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawScaleTransform</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawText</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDrawTranslationTransform</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDropAttachment</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osDropAttachmentAt</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osEjectFromGroup</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osForceAttachToAvatar</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osForceAttachToAvatarFromInventory</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osForceAttachToOtherAvatarFromInventory</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osForceBreakAllLinks</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osForceBreakLink</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osForceCreateLink</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osForceDetachFromAvatar</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osForceDropAttachment</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osForceDropAttachmentAt</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osForceOtherSit</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osFormatString</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetAgentCountry</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetAgentIP</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetAgents</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetApparentRegionTime</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetApparentRegionTimeString</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetApparentTime</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetApparentTimeString</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetAvatarHomeURI</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetAvatarList</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetCurrentSunHour</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetDrawStringSize</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetGender</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetGridCustom</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetGridGatekeeperURI</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetGridHomeURI</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetGridLoginURI</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetGridName</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetGridNick</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetHealRate</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetHealth</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetInertiaData</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetInventoryDesc</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetInventoryItemKey</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetInventoryItemKeys</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetInventoryLastOwner</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetInventoryName</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetInventoryNames</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLastChangedEventKey</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkColor</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkInventoryDesc</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkInventoryItemKey</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkInventoryItemKeys</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkInventoryKey</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkInventoryKeys</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkInventoryName</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkInventoryNames</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkNumber</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkPrimitiveParams</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkSitActiveRange</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetLinkStandTarget</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetMapTexture</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetNotecard</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetNotecardLine</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetNPCList</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetNumberOfAttachments</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetNumberOfNotecardLines</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetParcelDetails</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetParcelDwell</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetParcelID</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetParcelIDs</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetPhysicsEngineName</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetPhysicsEngineType</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetPrimCount</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetPrimitiveParams</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetPSTWallclock</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetRegionMapTexture</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetRegionSize</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetRegionStats</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetRezzingObject</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetScriptEngineName</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetSimulatorMemory</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetSimulatorMemoryKB</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetSimulatorVersion</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetSitActiveRange</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetSitTargetPos</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetSitTargetRot</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetSittingAvatarsCount</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetStandTarget</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetSunParam</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetTerrainHeight</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGetWindParam</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGiveLinkInventory</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osGiveLinkInventoryList</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osInviteToGroup</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osIsNotValidNumber</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osIsNpc</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osIsUUID</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osKey2Name</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osKickAvatar</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osLinkParticleSystem</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osListAsFloat</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osListAsInteger</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osListAsRotation</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osListAsString</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osListAsVector</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osListenRegex</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osListFindListNext</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osListSortInPlace</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osListSortInPlaceStrided</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osLoadedCreationDate</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osLoadedCreationID</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osLoadedCreationTime</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osLocalTeleportAgent</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osLoopSound</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osLoopSoundMaster</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osLoopSoundSlave</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osMakeNotecard</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osMatchString</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osMax</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osMessageAttachments</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osMessageObject</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osMin</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osMovePen</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcCreate</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcGetOwner</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcGetPos</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcGetRot</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcLoadAppearance</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcLookAt</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcMoveTo</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcMoveToTarget</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcPlayAnimation</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcRemove</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcSaveAppearance</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcSay</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcSayTo</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcSetProfileAbout</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcSetProfileImage</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcSetRot</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcShout</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcSit</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcStand</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcStopAnimation</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcStopMoveToTarget</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcTouch</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osNpcWhisper</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osOldList2ListStrided</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osOwnerSaveAppearance</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osParcelJoin</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osParcelSetDetails</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osParcelSubdivide</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osParticleSystem</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osPlaySound</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osPlaySoundSlave</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osPreloadSound</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osRegexIsMatch</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osRegionNotice</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osRegionRestart</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osRemoveLinkInventory</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osReplaceAgentEnvironment</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osReplaceParcelEnvironment</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osReplaceRegionEnvironment</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osReplaceString</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osRequestSecureURL</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osRequestURL</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osResetAllScripts</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osResetEnvironment</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osRound</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetContentType</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetDynamicTextureData</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetDynamicTextureDataBlend</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetDynamicTextureDataBlendFace</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetDynamicTextureDataFace</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetDynamicTextureURL</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetDynamicTextureURLBlend</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetDynamicTextureURLBlendFace</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetEstateSunSettings</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetFontName</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetFontSize</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetHealRate</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetHealth</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetInertia</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetInertiaAsBox</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetInertiaAsCylinder</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetInertiaAsSphere</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetLinkSitActiveRange</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetLinkStandTarget</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetOwnerSpeed</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetParcelDetails</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetParcelMediaURL</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetParcelMusicURL</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetParcelSIPAddress</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetPenCap</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetPenColor</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetPenColour</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetPenSize</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetPrimFloatOnWater</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetPrimitiveParams</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetProjectionParams</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetRegionSunSettings</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetRegionWaterHeight</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetRot</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetSitActiveRange</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetSoundRadius</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetSpeed</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetStandTarget</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetSunParam</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetTerrainHeight</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetTerrainTexture</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetTerrainTextureHeight</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetTerrainTextures</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSetWindParam</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSHA256</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSlerp</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osStopSound</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osStringEndsWith</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osStringIndexOf</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osStringLastIndexOf</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osStringRemove</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osStringReplace</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osStringStartsWith</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osStringSubString</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSunGetParam</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osSunSetParam</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osTeleportAgent</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osTeleportObject</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osTeleportOwner</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osTemperature2sRGB</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osTerrainFlush</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osTerrainGetHeight</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osTerrainSetHeight</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osTriggerSound</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osTriggerSoundLimited</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osUnixTimeToTimestamp</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osVecDistSquare</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osVecMagSquare</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osVolumeDetect</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+         <key>osWindActiveModelPluginName</key>
+         <map>
+            <key>tooltip</key>
+            <string>OpenSim OSSL function (server extension)</string>
+         </map>
+      </map>
+   </map>
+</llsd>

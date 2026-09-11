@@ -78,6 +78,7 @@
 #include "llcombobox.h"
 #include "llviewerstats.h"
 #include "llviewerwindow.h"
+#include "mkopluginmanager.h"
 #include "lluictrlfactory.h"
 #include "llmediactrl.h"
 #include "lluictrlfactory.h"
@@ -2253,6 +2254,13 @@ LLPreviewLSL::LLPreviewLSL(const LLSD& key )
 
 LLPreviewLSL::~LLPreviewLSL()
 {
+    // <Mko> Remove any Monaco editor save callback tied to this floater.
+    if (!mItemUUID.isNull())
+    {
+        MkoPluginManager::instance().unregisterScriptSaveCallback(mItemUUID.asString());
+    }
+    // </Mko>
+
     delete mItemObserver;
     mItemObserver = NULL;
 }
@@ -2666,6 +2674,36 @@ void LLPreviewLSL::onLoadComplete(const LLUUID& asset_uuid, LLAssetType::EType t
             preview->mScriptEd->setAssetID(asset_uuid);
             preview->mAssetStatus = PREVIEW_ASSET_LOADED;
 
+            // <Mko> Open the VS Code (Monaco) script editor and let plugins know.
+            {
+                const std::string script_id = item_uuid->asString();
+                const std::string script_text(&buffer[0]);
+
+                MkoPluginManager::instance().openScriptEditor(
+                    script_id.c_str(), script_name.c_str(), "lsl", script_text.c_str());
+
+                LLSD msg;
+                msg["id"] = script_id;
+                msg["title"] = script_name;
+                msg["language"] = "lsl";
+                msg["content"] = script_text;
+                MkoPluginManager::instance().broadcastToPlugins("MkoScriptEditorOpen", msg);
+
+                // Register a C++ callback so that saving in the Monaco editor
+                // updates this legacy floater and triggers the normal compile/upload.
+                LLHandle<LLPreviewLSL> handle = preview->getDerivedHandle<LLPreviewLSL>();
+                MkoPluginManager::instance().registerScriptSaveCallback(script_id,
+                    [handle](const LLSD& save_msg)
+                    {
+                        if (LLPreviewLSL* self = handle.get())
+                        {
+                            self->mScriptEd->setScriptText(save_msg["content"].asString(), true);
+                            self->mScriptEd->doSave(false, true);
+                        }
+                    });
+            }
+            // </Mko>
+
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
             // Start the timer which will perform regular backup saves
             preview->mBackupTimer = setupCallbackTimer(60.0f, boost::bind(&LLPreviewLSL::onBackupTimer, preview));
@@ -2731,6 +2769,16 @@ LLLiveLSLEditor::LLLiveLSLEditor(const LLSD& key) :
     mObjectName("")
 {
     mFactoryMap["script ed panel"] = LLCallbackMap(LLLiveLSLEditor::createScriptEdPanel, this);
+}
+
+LLLiveLSLEditor::~LLLiveLSLEditor()
+{
+    // <Mko> Remove any Monaco editor save callback tied to this floater.
+    if (!mItemUUID.isNull())
+    {
+        MkoPluginManager::instance().unregisterScriptSaveCallback(mItemUUID.asString());
+    }
+    // </Mko>
 }
 
 bool LLLiveLSLEditor::postBuild()
@@ -3020,6 +3068,36 @@ void LLLiveLSLEditor::loadScriptText(const LLUUID &uuid, LLAssetType::EType type
         script_name = inv_item->getName();
     }
     mScriptEd->setScriptName(script_name);
+
+    // <Mko> Open the VS Code (Monaco) script editor and let plugins know.
+    {
+        const std::string script_id = mItemUUID.asString();
+        const std::string script_text(&buffer[0]);
+
+        MkoPluginManager::instance().openScriptEditor(
+            script_id.c_str(), script_name.c_str(), "lsl", script_text.c_str());
+
+        LLSD msg;
+        msg["id"] = script_id;
+        msg["title"] = script_name;
+        msg["language"] = "lsl";
+        msg["content"] = script_text;
+        MkoPluginManager::instance().broadcastToPlugins("MkoScriptEditorOpen", msg);
+
+        // Register a C++ callback so that saving in the Monaco editor
+        // updates this legacy floater and triggers the normal compile/upload.
+        LLHandle<LLLiveLSLEditor> handle = getDerivedHandle<LLLiveLSLEditor>();
+        MkoPluginManager::instance().registerScriptSaveCallback(script_id,
+            [handle](const LLSD& save_msg)
+            {
+                if (LLLiveLSLEditor* self = handle.get())
+                {
+                    self->mScriptEd->setScriptText(save_msg["content"].asString(), true);
+                    self->mScriptEd->doSave(false, true);
+                }
+            });
+    }
+    // </Mko>
 }
 
 

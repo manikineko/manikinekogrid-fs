@@ -16,6 +16,14 @@
 #include "llchat.h"
 #include "llviewercontrol.h"
 #include "llviewershadermgr.h"
+#include "llfloatermkohtmloverlay.h"
+#include "llfloatermkoscripteditor.h"
+#include "llfloaterreg.h"
+#include "llstatusbar.h"
+#include "llagent.h"
+#include "llviewerregion.h"
+#include "llcoros.h"
+#include "llcorehttputil.h"
 
 #include <sstream>
 #include <fstream>
@@ -59,6 +67,16 @@ void MkoPluginManager::init()
     sHostInterface.get_graphics_info = &MkoPluginManager::hostGetGraphicsInfo;
     sHostInterface.register_shader = &MkoPluginManager::hostRegisterShader;
     sHostInterface.unregister_shader = &MkoPluginManager::hostUnregisterShader;
+    sHostInterface.register_html_overlay = &MkoPluginManager::hostRegisterHtmlOverlay;
+    sHostInterface.unregister_html_overlay = &MkoPluginManager::hostUnregisterHtmlOverlay;
+    sHostInterface.show_html_overlay = &MkoPluginManager::hostShowHtmlOverlay;
+    sHostInterface.navigate_html_overlay = &MkoPluginManager::hostNavigateHtmlOverlay;
+    sHostInterface.open_script_editor = &MkoPluginManager::hostOpenScriptEditor;
+    sHostInterface.close_script_editor = &MkoPluginManager::hostCloseScriptEditor;
+    sHostInterface.get_avatar_health = &MkoPluginManager::hostGetAvatarHealth;
+    sHostInterface.get_avatar_health_max = &MkoPluginManager::hostGetAvatarHealthMax;
+    sHostInterface.get_region_stats = &MkoPluginManager::hostGetRegionStats;
+    sHostInterface.http_request = &MkoPluginManager::hostHttpRequest;
 
     loadSettings();
 
@@ -86,7 +104,28 @@ bool MkoPluginManager::dispatchMessage(const std::string& msg_name,
                                        const LLSD& message,
                                        LLHTTPNode::ResponsePtr responsep)
 {
+    // Capture live region statistics for the health dashboard / plugins.
+    if (msg_name == "SimStats")
+    {
+        instance().captureSimStats(message);
+    }
+
     // Internal control messages that the host handles directly.
+    if (msg_name == "MkoOpenFloater")
+    {
+        // Open a viewer floater by registry name, e.g. "mko_health".
+        if (message.has("name"))
+        {
+            LLSD key;
+            if (message.has("key"))
+            {
+                key = message["key"];
+            }
+            LLFloaterReg::showInstance(message["name"].asString(), key, true);
+        }
+        return true;
+    }
+
     if (msg_name == "MkoReloadShaders")
     {
         LL_INFOS("MkoPlugin") << "Reloading shaders via plugin request" << LL_ENDL;
@@ -687,3 +726,430 @@ std::string MkoPluginManager::getShaderSource(const std::string& name, GLenum ty
     }
     return std::string();
 }
+
+// ------------------------------------------------------------------
+// <Mko> API v8: HTML overlays, script editor, health, region stats, HTTP
+// ------------------------------------------------------------------
+
+int MkoPluginManager::registerHtmlOverlay(const MkoHtmlOverlayDesc* desc)
+{
+    if (!desc || !desc->id)
+    {
+        return -1;
+    }
+
+    LLSD key;
+    key["id"] = std::string(desc->id);
+    key["title"] = std::string(desc->title ? desc->title : "MKO Overlay");
+    if (desc->url)
+    {
+        key["url"] = std::string(desc->url);
+    }
+    if (desc->html)
+    {
+        key["html"] = std::string(desc->html);
+    }
+    key["x"] = (LLSD::Integer)desc->x;
+    key["y"] = (LLSD::Integer)desc->y;
+    key["width"] = (LLSD::Integer)desc->width;
+    key["height"] = (LLSD::Integer)desc->height;
+    key["opacity"] = (LLSD::Real)desc->opacity;
+    key["closable"] = desc->closable != 0;
+    key["visible"] = desc->visible != 0;
+
+    LLFloaterMkoHtmlOverlay::showFromKey(key);
+    return 0;
+}
+
+int MkoPluginManager::unregisterHtmlOverlay(const char* id)
+{
+    if (!id)
+    {
+        return -1;
+    }
+    LLSD key;
+    key["id"] = std::string(id);
+    LLFloaterReg::destroyInstance("mko_html_overlay", key);
+    return 0;
+}
+
+int MkoPluginManager::showHtmlOverlay(const char* id, int visible)
+{
+    if (!id)
+    {
+        return -1;
+    }
+    LLSD key;
+    key["id"] = std::string(id);
+
+    if (visible)
+    {
+        key["visible"] = true;
+        LLFloaterMkoHtmlOverlay::showFromKey(key);
+    }
+    else
+    {
+        LLFloater* floater = LLFloaterReg::findInstance("mko_html_overlay", key);
+        if (floater)
+        {
+            floater->closeFloater(false);
+        }
+    }
+    return 0;
+}
+
+int MkoPluginManager::navigateHtmlOverlay(const char* id, const char* url)
+{
+    if (!id || !url)
+    {
+        return -1;
+    }
+    LLSD key;
+    key["id"] = std::string(id);
+
+    LLFloater* floater = LLFloaterReg::findInstance("mko_html_overlay", key);
+    LLFloaterMkoHtmlOverlay* overlay = dynamic_cast<LLFloaterMkoHtmlOverlay*>(floater);
+    if (!overlay)
+    {
+        return -1;
+    }
+    overlay->navigateToUrl(std::string(url));
+    return 0;
+}
+
+int MkoPluginManager::openScriptEditor(const char* id, const char* title,
+                                       const char* language, const char* content)
+{
+    if (!id)
+    {
+        return -1;
+    }
+
+    LLSD key;
+    key["id"] = std::string(id);
+    key["title"] = std::string(title ? title : "Script");
+    key["language"] = std::string(language ? language : "lsl");
+    key["content"] = std::string(content ? content : "");
+
+    LLFloaterMkoScriptEditor::showFromKey(key);
+    return 0;
+}
+
+int MkoPluginManager::closeScriptEditor(const char* id)
+{
+    if (!id)
+    {
+        return -1;
+    }
+    LLSD key;
+    key["id"] = std::string(id);
+    LLFloaterReg::destroyInstance("mko_script_editor", key);
+    return 0;
+}
+
+void MkoPluginManager::registerScriptSaveCallback(const std::string& id,
+                                                  std::function<void(const LLSD&)> callback)
+{
+    if (id.empty() || !callback) return;
+    MkoPluginManager& self = instance();
+    std::lock_guard<std::mutex> lock(self.mScriptSaveMutex);
+    self.mScriptSaveCallbacks[id] = callback;
+}
+
+void MkoPluginManager::unregisterScriptSaveCallback(const std::string& id)
+{
+    MkoPluginManager& self = instance();
+    std::lock_guard<std::mutex> lock(self.mScriptSaveMutex);
+    self.mScriptSaveCallbacks.erase(id);
+}
+
+void MkoPluginManager::onScriptEditorSaved(const LLSD& message)
+{
+    if (!message.has("id")) return;
+    const std::string id = message["id"].asString();
+    MkoPluginManager& self = instance();
+    std::function<void(const LLSD&)> cb;
+    {
+        std::lock_guard<std::mutex> lock(self.mScriptSaveMutex);
+        auto it = self.mScriptSaveCallbacks.find(id);
+        if (it != self.mScriptSaveCallbacks.end())
+        {
+            cb = it->second;
+        }
+    }
+    if (cb)
+    {
+        cb(message);
+    }
+}
+
+int MkoPluginManager::getAvatarHealth()
+{
+    return gStatusBar ? gStatusBar->getHealth() : 0;
+}
+
+int MkoPluginManager::getAvatarHealthMax()
+{
+    // Server-configurable via the "MkoHealthMax" plugin setting; the
+    // legacy default of 100 keeps Second Life / OpenSim compatibility.
+    static const int DEFAULT_MAX = 100;
+    MkoPluginManager& self = instance();
+    std::lock_guard<std::mutex> lock(self.mSettingsMutex);
+    auto it = self.mSettings.find("MkoHealthMax");
+    if (it != self.mSettings.end())
+    {
+        int v = atoi(it->second.c_str());
+        if (v > 0)
+        {
+            return v;
+        }
+    }
+    return DEFAULT_MAX;
+}
+
+namespace
+{
+    struct SimStatNameEntry
+    {
+        S32 id;
+        const char* name;
+    };
+
+    // Well-known SimStats stat ids (see llviewerstats.h).
+    const SimStatNameEntry SIM_STAT_NAMES[] =
+    {
+        {  0, "time_dilation" },
+        {  1, "fps" },
+        {  2, "physics_fps" },
+        {  3, "agent_updates" },
+        {  4, "frame_ms" },
+        {  5, "net_ms" },
+        {  6, "sim_other_ms" },
+        {  7, "physics_ms" },
+        {  8, "agent_ms" },
+        {  9, "image_ms" },
+        { 10, "script_ms" },
+        { 11, "objects" },
+        { 12, "objects_active" },
+        { 13, "agents_main" },
+        { 14, "agents_child" },
+        { 15, "scripts_active" },
+        { 16, "lsl_ips" },
+        { 21, "virtual_size_kb" },
+        { 22, "resident_size_kb" },
+    };
+
+    const char* simStatName(S32 id)
+    {
+        for (const SimStatNameEntry& e : SIM_STAT_NAMES)
+        {
+            if (e.id == id)
+            {
+                return e.name;
+            }
+        }
+        return nullptr;
+    }
+} // anonymous namespace
+
+void MkoPluginManager::captureSimStats(const LLSD& message)
+{
+    if (!message.has("Stat"))
+    {
+        return;
+    }
+
+    std::lock_guard<std::mutex> lock(mSimStatsMutex);
+    const LLSD& stats = message["Stat"];
+    if (stats.isArray())
+    {
+        for (LLSD::array_const_iterator it = stats.beginArray();
+             it != stats.endArray(); ++it)
+        {
+            if (it->has("StatID") && it->has("StatValue"))
+            {
+                mSimStats[it->get("StatID").asInteger()] = it->get("StatValue").asReal();
+            }
+        }
+    }
+    else if (stats.isMap() && stats.has("StatID") && stats.has("StatValue"))
+    {
+        mSimStats[stats["StatID"].asInteger()] = stats["StatValue"].asReal();
+    }
+}
+
+LLSD MkoPluginManager::getRegionStatsLLSD()
+{
+    LLSD stats = LLSD::emptyMap();
+
+    LLViewerRegion* region = gAgent.getRegion();
+    stats["region"] = region ? region->getName() : LLStringUtil::null;
+    stats["time_dilation"] = (LLSD::Real)(region ? region->getTimeDilation() : 0.0f);
+
+    MkoPluginManager& self = instance();
+    {
+        std::lock_guard<std::mutex> lock(self.mSimStatsMutex);
+        for (const auto& kv : self.mSimStats)
+        {
+            const char* name = simStatName(kv.first);
+            if (name)
+            {
+                stats[name] = (LLSD::Real)kv.second;
+            }
+            stats[llformat("stat_%d", kv.first)] = (LLSD::Real)kv.second;
+        }
+    }
+
+    stats["avatar_health"] = (LLSD::Integer)getAvatarHealth();
+    stats["avatar_health_max"] = (LLSD::Integer)getAvatarHealthMax();
+    return stats;
+}
+
+std::string MkoPluginManager::getRegionStatsText()
+{
+    LLSD stats = getRegionStatsLLSD();
+
+    std::ostringstream out;
+    out << "Region: " << (stats["region"].isString() && !stats["region"].asString().empty()
+                              ? stats["region"].asString()
+                              : std::string("(none)")) << "\n";
+    out << llformat("Time dilation: %.3f\n", (F64)stats["time_dilation"].asReal());
+    out << llformat("Sim FPS: %.1f\n", (F64)stats["fps"].asReal());
+    out << llformat("Physics FPS: %.1f\n", (F64)stats["physics_fps"].asReal());
+    out << llformat("Frame time: %.1f ms\n", (F64)stats["frame_ms"].asReal());
+    out << llformat("Physics time: %.1f ms\n", (F64)stats["physics_ms"].asReal());
+    out << llformat("Script time: %.1f ms\n", (F64)stats["script_ms"].asReal());
+    out << llformat("Agents (root/child): %d / %d\n",
+                    stats["agents_main"].asInteger(), stats["agents_child"].asInteger());
+    out << llformat("Objects: %d (%d active)\n",
+                    stats["objects"].asInteger(), stats["objects_active"].asInteger());
+    out << llformat("Scripts (active): %d\n", stats["scripts_active"].asInteger());
+    return out.str();
+}
+
+namespace
+{
+    void mkoHttpRequestCoro(std::string url, std::string method, std::string body, std::string msgName)
+    {
+        LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+        LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
+            httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("MkoHttpRequestCoro", httpPolicy);
+        LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+
+        LLSD result;
+        if (LLStringUtil::compareStrings(method, "POST") == 0)
+        {
+            LLSD body_llsd;
+            if (!body.empty())
+            {
+                std::istringstream istr(body);
+                LLSDSerialize::deserialize(body_llsd, istr, LLSDSerialize::SIZE_UNLIMITED);
+            }
+            result = httpAdapter->postAndSuspend(httpRequest, url, body_llsd);
+        }
+        else
+        {
+            result = httpAdapter->getAndSuspend(httpRequest, url);
+        }
+
+        LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+        LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+        LLSD msg;
+        msg["url"] = url;
+        msg["status"] = (LLSD::Integer)(status ? (S32)status.getType() : 0);
+        msg["body"] = result;
+
+        if (status)
+        {
+            // The body arrived as parsed LLSD; hand plugins the LLSD
+            // notation directly.
+            std::ostringstream ostr;
+            LLSDSerialize::serialize(result, ostr, LLSDSerialize::LLSD_NOTATION);
+            msg["body_notation"] = ostr.str();
+        }
+
+        MkoPluginManager::instance().broadcastToPlugins(msgName, msg);
+    }
+} // anonymous namespace
+
+int MkoPluginManager::httpRequest(const char* url, const char* method,
+                                  const char* body, const char* msg_name)
+{
+    if (!url || !msg_name)
+    {
+        return -1;
+    }
+
+    std::string method_str = method ? method : "GET";
+    LLStringUtil::toUpper(method_str);
+    if (method_str != "GET" && method_str != "POST")
+    {
+        LL_WARNS("MkoPlugin") << "Unsupported HTTP method '" << method_str << "' requested by plugin" << LL_ENDL;
+        return -1;
+    }
+
+    LLCoros::instance().launch("MkoHttpRequestCoro",
+        boost::bind(mkoHttpRequestCoro,
+                    std::string(url), method_str,
+                    std::string(body ? body : ""), std::string(msg_name)));
+    return 0;
+}
+
+int MkoPluginManager::hostRegisterHtmlOverlay(const MkoHtmlOverlayDesc* desc)
+{
+    return registerHtmlOverlay(desc);
+}
+
+int MkoPluginManager::hostUnregisterHtmlOverlay(const char* id)
+{
+    return unregisterHtmlOverlay(id);
+}
+
+int MkoPluginManager::hostShowHtmlOverlay(const char* id, int visible)
+{
+    return showHtmlOverlay(id, visible);
+}
+
+int MkoPluginManager::hostNavigateHtmlOverlay(const char* id, const char* url)
+{
+    return navigateHtmlOverlay(id, url);
+}
+
+int MkoPluginManager::hostOpenScriptEditor(const char* id, const char* title,
+                                           const char* language, const char* content)
+{
+    return openScriptEditor(id, title, language, content);
+}
+
+int MkoPluginManager::hostCloseScriptEditor(const char* id)
+{
+    return closeScriptEditor(id);
+}
+
+int MkoPluginManager::hostGetAvatarHealth(void)
+{
+    return getAvatarHealth();
+}
+
+int MkoPluginManager::hostGetAvatarHealthMax(void)
+{
+    return getAvatarHealthMax();
+}
+
+const char* MkoPluginManager::hostGetRegionStats(void)
+{
+    MkoPluginManager& self = instance();
+    std::ostringstream ostr;
+    LLSD stats = getRegionStatsLLSD();
+    LLSDSerialize::serialize(stats, ostr, LLSDSerialize::LLSD_NOTATION);
+    self.mRegionStatsCache = ostr.str();
+    return self.mRegionStatsCache.c_str();
+}
+
+int MkoPluginManager::hostHttpRequest(const char* url, const char* method,
+                                      const char* body, const char* msg_name)
+{
+    return httpRequest(url, method, body, msg_name);
+}
+// </Mko>

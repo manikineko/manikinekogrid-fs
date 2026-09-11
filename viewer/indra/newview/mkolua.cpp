@@ -245,6 +245,195 @@ static int l_register_shader(lua_State* L)
     return 1;
 }
 
+static int l_unregister_shader(lua_State* L)
+{
+    if (!sHost || !sHost->unregister_shader)
+    {
+        lua_pushboolean(L, false);
+        return 1;
+    }
+    const char* name = luaL_checkstring(L, 1);
+    MkoShaderType type = MKO_SHADER_FRAGMENT;
+    if (lua_isnumber(L, 2))
+    {
+        int t = (int)lua_tointeger(L, 2);
+        if (t >= 0 && t < MKO_SHADER_COUNT)
+        {
+            type = (MkoShaderType)t;
+        }
+    }
+    else if (lua_isstring(L, 2))
+    {
+        const char* ts = lua_tostring(L, 2);
+        if (strcmp(ts, "vertex") == 0 || strcmp(ts, "v") == 0 || strcmp(ts, "vert") == 0)
+        {
+            type = MKO_SHADER_VERTEX;
+        }
+        else if (strcmp(ts, "geometry") == 0 || strcmp(ts, "g") == 0 || strcmp(ts, "geom") == 0)
+        {
+            type = MKO_SHADER_GEOMETRY;
+        }
+    }
+    int r = sHost->unregister_shader(name, type);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
+// ------------------------------------------------------------------
+// <Mko> API v8 bindings: HTML overlays, script editor, health, HTTP
+// ------------------------------------------------------------------
+
+static int l_register_html_overlay(lua_State* L)
+{
+    if (!sHost || !sHost->register_html_overlay)
+    {
+        lua_pushboolean(L, false);
+        return 1;
+    }
+    luaL_checktype(L, 1, LUA_TTABLE);
+
+    MkoHtmlOverlayDesc desc;
+    memset(&desc, 0, sizeof(desc));
+
+    lua_getfield(L, 1, "id");      desc.id = luaL_optstring(L, -1, "overlay"); lua_pop(L, 1);
+    lua_getfield(L, 1, "title");   desc.title = lua_tostring(L, -1); lua_pop(L, 1);
+    lua_getfield(L, 1, "url");      desc.url = lua_tostring(L, -1); lua_pop(L, 1);
+    lua_getfield(L, 1, "html");    desc.html = lua_tostring(L, -1); lua_pop(L, 1);
+    lua_getfield(L, 1, "x");       desc.x = (int)luaL_optinteger(L, -1, -1); lua_pop(L, 1);
+    lua_getfield(L, 1, "y");       desc.y = (int)luaL_optinteger(L, -1, -1); lua_pop(L, 1);
+    lua_getfield(L, 1, "width");   desc.width = (int)luaL_optinteger(L, -1, 512); lua_pop(L, 1);
+    lua_getfield(L, 1, "height"); desc.height = (int)luaL_optinteger(L, -1, 384); lua_pop(L, 1);
+    lua_getfield(L, 1, "opacity"); desc.opacity = luaL_optnumber(L, -1, 0.0); lua_pop(L, 1);
+    lua_getfield(L, 1, "visible"); desc.visible = lua_toboolean(L, -1) ? 1 : 0; lua_pop(L, 1);
+    lua_getfield(L, 1, "closable"); desc.closable = lua_toboolean(L, -1) ? 1 : 0; lua_pop(L, 1);
+
+    if (!desc.title) desc.title = "MKO Overlay";
+
+    int r = sHost->register_html_overlay(&desc);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
+static int l_unregister_html_overlay(lua_State* L)
+{
+    if (!sHost || !sHost->unregister_html_overlay)
+    {
+        lua_pushboolean(L, false);
+        return 1;
+    }
+    const char* id = luaL_checkstring(L, 1);
+    int r = sHost->unregister_html_overlay(id);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
+static int l_show_html_overlay(lua_State* L)
+{
+    if (!sHost || !sHost->show_html_overlay)
+    {
+        lua_pushboolean(L, false);
+        return 1;
+    }
+    const char* id = luaL_checkstring(L, 1);
+    int visible = lua_toboolean(L, 2) ? 1 : 0;
+    int r = sHost->show_html_overlay(id, visible);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
+static int l_navigate_html_overlay(lua_State* L)
+{
+    if (!sHost || !sHost->navigate_html_overlay)
+    {
+        lua_pushboolean(L, false);
+        return 1;
+    }
+    const char* id = luaL_checkstring(L, 1);
+    const char* url = luaL_checkstring(L, 2);
+    int r = sHost->navigate_html_overlay(id, url);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
+static int l_open_script_editor(lua_State* L)
+{
+    if (!sHost || !sHost->open_script_editor)
+    {
+        lua_pushboolean(L, false);
+        return 1;
+    }
+    const char* id = luaL_checkstring(L, 1);
+    const char* title = luaL_optstring(L, 2, "Script");
+    const char* language = luaL_optstring(L, 3, "lsl");
+    const char* content = luaL_optstring(L, 4, "");
+    int r = sHost->open_script_editor(id, title, language, content);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
+static int l_close_script_editor(lua_State* L)
+{
+    if (!sHost || !sHost->close_script_editor)
+    {
+        lua_pushboolean(L, false);
+        return 1;
+    }
+    const char* id = luaL_checkstring(L, 1);
+    int r = sHost->close_script_editor(id);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
+static int l_get_avatar_health(lua_State* L)
+{
+    if (!sHost || !sHost->get_avatar_health)
+    {
+        lua_pushinteger(L, 0);
+        return 1;
+    }
+    lua_pushinteger(L, sHost->get_avatar_health());
+    return 1;
+}
+
+static int l_get_avatar_health_max(lua_State* L)
+{
+    if (!sHost || !sHost->get_avatar_health_max)
+    {
+        lua_pushinteger(L, 100);
+        return 1;
+    }
+    lua_pushinteger(L, sHost->get_avatar_health_max());
+    return 1;
+}
+
+static int l_get_region_stats(lua_State* L)
+{
+    if (!sHost || !sHost->get_region_stats)
+    {
+        lua_pushnil(L);
+        return 1;
+    }
+    const char* stats = sHost->get_region_stats();
+    lua_pushstring(L, stats ? stats : "");
+    return 1;
+}
+
+static int l_http_request(lua_State* L)
+{
+    if (!sHost || !sHost->http_request)
+    {
+        lua_pushboolean(L, false);
+        return 1;
+    }
+    const char* url = luaL_checkstring(L, 1);
+    const char* method = luaL_optstring(L, 2, "GET");
+    const char* body = luaL_optstring(L, 3, NULL);
+    const char* msg_name = luaL_optstring(L, 4, "MkoHttpResult");
+    int r = sHost->http_request(url, method, body, msg_name);
+    lua_pushboolean(L, r == 0);
+    return 1;
+}
+
 static void register_mko_table(lua_State* L)
 {
     lua_newtable(L);
@@ -261,6 +450,17 @@ static void register_mko_table(lua_State* L)
     lua_pushcfunction(L, l_get_graphics_info); lua_setfield(L, -2, "get_graphics_info");
     lua_pushcfunction(L, l_register_on_message); lua_setfield(L, -2, "register_on_message");
     lua_pushcfunction(L, l_register_shader); lua_setfield(L, -2, "register_shader");
+    lua_pushcfunction(L, l_unregister_shader); lua_setfield(L, -2, "unregister_shader");
+    lua_pushcfunction(L, l_register_html_overlay); lua_setfield(L, -2, "register_html_overlay");
+    lua_pushcfunction(L, l_unregister_html_overlay); lua_setfield(L, -2, "unregister_html_overlay");
+    lua_pushcfunction(L, l_show_html_overlay); lua_setfield(L, -2, "show_html_overlay");
+    lua_pushcfunction(L, l_navigate_html_overlay); lua_setfield(L, -2, "navigate_html_overlay");
+    lua_pushcfunction(L, l_open_script_editor); lua_setfield(L, -2, "open_script_editor");
+    lua_pushcfunction(L, l_close_script_editor); lua_setfield(L, -2, "close_script_editor");
+    lua_pushcfunction(L, l_get_avatar_health); lua_setfield(L, -2, "get_avatar_health");
+    lua_pushcfunction(L, l_get_avatar_health_max); lua_setfield(L, -2, "get_avatar_health_max");
+    lua_pushcfunction(L, l_get_region_stats); lua_setfield(L, -2, "get_region_stats");
+    lua_pushcfunction(L, l_http_request); lua_setfield(L, -2, "http_request");
     lua_setglobal(L, "mko");
 }
 

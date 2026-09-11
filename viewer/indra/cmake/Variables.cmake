@@ -183,8 +183,23 @@ set(GRID agni CACHE STRING "Target Grid")
 set(FLICKR_API_KEY "daaabff93a967e0f37fa18863bb43b29")
 set(FLICKR_API_SECRET "846f0958020b553e") 
 
-# Discord client key.
-set(DDISCORD_API_KEY "1263849976069623861")
+# Discord client key. Prefer environment variable or the per-user secret file
+# written by viewer/scripts/setup-discord-secret.sh.
+if(DEFINED ENV{DISCORD_API_KEY})
+    set(DDISCORD_API_KEY "$ENV{DISCORD_API_KEY}")
+else()
+    set(_MKO_DISCORD_SECRET_FILE "$ENV{XDG_CONFIG_HOME}/manikineko/discord_api_key")
+    if(NOT EXISTS "${_MKO_DISCORD_SECRET_FILE}")
+        set(_MKO_DISCORD_SECRET_FILE "$ENV{HOME}/.config/manikineko/discord_api_key")
+    endif()
+    if(EXISTS "${_MKO_DISCORD_SECRET_FILE}")
+        file(READ "${_MKO_DISCORD_SECRET_FILE}" DDISCORD_API_KEY)
+        string(STRIP "${DDISCORD_API_KEY}" DDISCORD_API_KEY)
+    else()
+        set(DDISCORD_API_KEY "")
+    endif()
+    unset(_MKO_DISCORD_SECRET_FILE)
+endif()
 
 # FS:ND Don't force this into the cache, that can have some strange effects. Instead make it a normal variable
 #set(ENABLE_SIGNING OFF CACHE BOOL "Enable signing the viewer")

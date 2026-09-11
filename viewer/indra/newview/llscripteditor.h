@@ -53,6 +53,10 @@ public:
 
     void    initKeywords();
     void    loadKeywords();
+    // <Mko> Load a specific syntax keywords XML (e.g. OSSL) instead of the
+    // default LSL keyword set, then re-run segmentation on the current text.
+    void    setSyntaxFile(const std::string& filename);
+    // </Mko>
     /* virtual */ void  clearSegments();
     LLKeywords::keyword_iterator_t keywordsBegin()  { return mKeywords.begin(); }
     LLKeywords::keyword_iterator_t keywordsEnd()    { return mKeywords.end(); }

@@ -2017,6 +2017,26 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineRollDiceTotal", args));
                 return false;
             }
+            else if (command == "/health" || command == "/regionstats")
+            {
+                // <Mko> Forward health/region commands to the plugin system.
+                // An optional subcommand (e.g. "/health news") is forwarded
+                // so plugins can register their own pages.
+                std::string subcommand;
+                if (i >> subcommand)
+                {
+                    LLSD args;
+                    args["command"] = subcommand;
+                    MkoPluginManager::instance().broadcastToPlugins("MkoHealthCommand", args);
+                }
+                else
+                {
+                    LLSD args;
+                    args["command"] = (command == "/health") ? "dashboard" : "regionstats";
+                    MkoPluginManager::instance().broadcastToPlugins("MkoHealthCommand", args);
+                }
+                return false;
+            }
             else if (command == "/rtx")
             {
                 // Forward RTX slash commands to the Manikineko plugin manager.

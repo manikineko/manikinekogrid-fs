@@ -55,6 +55,9 @@
 #include "llfloaterbuycurrencyhtml.h"
 #include "llfloaterbuyland.h"
 #include "llfloaterbvhpreview.h"
+#include "llfloatermkohtmloverlay.h"
+#include "llfloatermkoscripteditor.h"
+#include "llfloatermkohealth.h"
 #include "llfloatercamera.h"
 #include "llfloatercamerapresets.h"
 #include "llfloaterchangeitemthumbnail.h"
@@ -684,6 +687,13 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("avatar_align",      "floater_avatar_align.xml",      (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAvatarAlign>);
     LLFloaterReg::add("avatar_align_mini", "floater_avatar_align_mini.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAvatarAlignMini>);
     // </FS:Chanayane>
+
+    // <Mko> Plugin-driven floaters (HTML overlay, embedded script editor,
+    // health & region dashboard). All controlled via the MKO plugin API.
+    LLFloaterReg::add("mko_html_overlay", "floater_mko_html_overlay.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMkoHtmlOverlay>);
+    LLFloaterReg::add("mko_script_editor", "floater_mko_script_editor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMkoScriptEditor>);
+    LLFloaterReg::add("mko_health", "floater_mko_health.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMkoHealth>);
+    // </Mko>
 
     LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<colors>
+	<!-- MKO Modern skin for Manikineko Online.
+	     A flat, dark, VSCode-inspired palette layered over the default
+	     skin. Only overrides are listed here; everything else falls back
+	     to the default skin (full legacy compatibility).
+
+	     Palette (Catppuccin-inspired):
+	       base      #1e1e2e   0.118 0.118 0.180
+	       mantle    #181825   0.094 0.094 0.145
+	       crust     #11111b   0.067 0.067 0.106
+	       surface0  #313244   0.192 0.196 0.267
+	       surface1  #45475a   0.271 0.278 0.353
+	       overlay0  #6c7086   0.424 0.439 0.525
+	       text      #cdd6f4   0.804 0.839 0.957
+	       subtext   #a6adc8   0.651 0.678 0.784
+	       blue      #89b4fa   0.537 0.706 0.980
+	       green     #a6e3a1   0.651 0.890 0.631
+	       red       #f38ba8   0.953 0.545 0.659
+	       yellow    #f9e2af   0.976 0.886 0.686
+	-->
+
+	<!-- Base scheme -->
+	<color name="EmphasisColor" value="0.537 0.706 0.980 1.0" />
+	<color name="EmphasisColorLight" value="0.651 0.890 0.631 1.0" />
+	<color name="EmphasisColor_13" value="0.537 0.706 0.980 0.13" />
+	<color name="EmphasisColor_35" value="0.537 0.706 0.980 0.35" />
+	<color name="SchemeLightest" value="0.271 0.278 0.353 1.0" />
+	<color name="SchemeLightest_35" value="0.271 0.278 0.353 0.35" />
+	<color name="SchemeDark" value="0.118 0.118 0.180 1.0" />
+	<color name="AccentColor" value="0.537 0.706 0.980 1.0" />
+
+	<!-- Windows / floaters / panels -->
+	<color name="FloaterDefaultBackgroundColor" value="0.118 0.118 0.180 1.0" />
+	<color name="FloaterFocusBackgroundColor" value="0.094 0.094 0.145 1.0" />
+	<color name="FloaterFocusBorderColor" value="0.424 0.439 0.525 1.0" />
+	<color name="FloaterUnfocusBorderColor" value="0.271 0.278 0.353 1.0" />
+	<color name="PanelDefaultBackgroundColor" value="0.118 0.118 0.180 1.0" />
+	<color name="PanelFocusBackgroundColor" value="0.094 0.094 0.145 1.0" />
+	<color name="PanelDark" value="0.067 0.067 0.106 1.0" />
+	<color name="PanelGray" value="0.192 0.196 0.267 1.0" />
+	<color name="TitleBarFocusColor" value="0.537 0.706 0.980 1.0" />
+	<color name="AlertBoxColor" value="0.094 0.094 0.145 1.0" />
+	<color name="AlertCautionBoxColor" value="0.976 0.886 0.686 0.16" />
+	<color name="HighlightPanelBackground" value="0.192 0.196 0.267 1.0" />
+	<color name="PanelNotificationBackground" value="0.192 0.196 0.267 1.0" />
+
+	<!-- Menus -->
+	<color name="MenuBarBgColor" value="0.094 0.094 0.145 1.0" />
+	<color name="MenuDefaultBgColor" value="0.094 0.094 0.145 1.0" />
+	<color name="MenuPopupBgColor" value="0.118 0.118 0.180 1.0" />
+	<color name="MenuItemHighlightBgColor" value="0.271 0.278 0.353 1.0" />
+	<color name="MenuItemHighlightFgColor" value="0.804 0.839 0.957 1.0" />
+	<color name="MenuItemEnabledColor" value="0.804 0.839 0.957 1.0" />
+	<color name="MenuItemDisabledColor" value="0.424 0.439 0.525 1.0" />
+
+	<!-- Buttons -->
+	<color name="ButtonColor" value="0.192 0.196 0.267 1.0" />
+	<color name="ButtonBorderColor" value="0.271 0.278 0.353 1.0" />
+	<color name="ButtonSelectedBgColor" value="0.537 0.706 0.980 1.0" />
+	<color name="ButtonSelectedColor" value="0.067 0.067 0.106 1.0" />
+	<color name="ButtonUnselectedBgColor" value="0.192 0.196 0.267 1.0" />
+	<color name="ButtonUnselectedFgColor" value="0.804 0.839 0.957 1.0" />
+	<color name="ButtonLabelColor" value="0.804 0.839 0.957 1.0" />
+	<color name="ButtonLabelDisabledColor" value="0.424 0.439 0.525 1.0" />
+	<color name="ButtonLabelSelectedColor" value="0.067 0.067 0.106 1.0" />
+	<color name="ButtonLabelSelectedDisabledColor" value="0.424 0.439 0.525 1.0" />
+	<color name="ButtonImageColor" value="0.804 0.839 0.957 1.0" />
+	<color name="FloaterButtonImageColor" value="0.804 0.839 0.957 1.0" />
+	<color name="ButtonFlashBgColor" value="0.953 0.545 0.659 1.0" />
+
+	<!-- Text -->
+	<color name="TextDefaultColor" value="0.804 0.839 0.957 1.0" />
+	<color name="TextFgColor" value="0.804 0.839 0.957 1.0" />
+	<color name="TextFgReadOnlyColor" value="0.651 0.678 0.784 1.0" />
+	<color name="TextFgTentativeColor" value="0.424 0.439 0.525 1.0" />
+	<color name="TextCursorColor" value="0.537 0.706 0.980 1.0" />
+	<color name="LabelTextColor" value="0.804 0.839 0.957 1.0" />
+	<color name="LabelSelectedColor" value="0.067 0.067 0.106 1.0" />
+	<color name="LabelDisabledColor" value="0.424 0.439 0.525 1.0" />
+	<color name="LabelSelectedDisabledColor" value="0.424 0.439 0.525 1.0" />
+	<color name="FilterTextColor" value="0.537 0.706 0.980 1.0" />
+	<color name="HealthTextColor" value="0.953 0.545 0.659 1.0" />
+	<color name="TimeTextColor" value="0.651 0.678 0.784 1.0" />
+	<color name="NotifyTextColor" value="0.804 0.839 0.957 1.0" />
+	<color name="NotecardTextColor" value="0.804 0.839 0.957 1.0" />
+	<color name="ChatHistoryTextColor" value="0.804 0.839 0.957 1.0" />
+	<color name="IMHistoryTextColor" value="0.804 0.839 0.957 1.0" />
+	<color name="ToolTipTextColor" value="0.804 0.839 0.957 1.0" />
+	<color name="InspectorTipTextColor" value="0.651 0.678 0.784 1.0" />
+	<color name="HintText" value="0.651 0.678 0.784 1.0" />
+
+	<!-- Text fields / editors -->
+	<color name="TextBgWriteableColor" value="0.067 0.067 0.106 1.0" />
+	<color name="TextBgFocusColor" value="0.067 0.067 0.106 1.0" />
+	<color name="TextBgReadOnlyColor" value="0.094 0.094 0.145 1.0" />
+	<color name="TextBgHighlightColor" value="0.271 0.278 0.353 1.0" />
+	<color name="ScrollBgWriteableColor" value="0.067 0.067 0.106 1.0" />
+	<color name="ScrollBgReadOnlyColor" value="0.094 0.094 0.145 1.0" />
+	<color name="ScrollBGStripeColor" value="0.118 0.118 0.180 1.0" />
+	<color name="ScrollHighlightedColor" value="0.537 0.706 0.980 1.0" />
+	<color name="ScrollHoveredColor" value="0.651 0.890 0.631 1.0" />
+	<color name="ScrollSelectedBGColor" value="0.271 0.278 0.353 1.0" />
+	<color name="ScrollSelectedFGColor" value="0.804 0.839 0.957 1.0" />
+	<color name="ScrollUnselectedColor" value="0.804 0.839 0.957 1.0" />
+	<color name="ScrollDisabledColor" value="0.424 0.439 0.525 1.0" />
+	<color name="ScrollbarThumbColor" value="0.271 0.278 0.353 1.0" />
+	<color name="ScrollbarTrackColor" value="0.094 0.094 0.145 1.0" />
+	<color name="ComboListBgColor" value="0.118 0.118 0.180 1.0" />
+
+	<!-- Script editor (embedded VSCode-style editor) -->
+	<color name="ScriptText" value="0.804 0.839 0.957 1.0" />
+	<color name="ScriptBackground" value="0.067 0.067 0.106 1.0" />
+	<color name="BuildToolsTextBackgroundColor" value="0.067 0.067 0.106 1.0" />
+
+	<!-- Lists / inventory -->
+	<color name="SelectedOutfitTextColor" value="0.537 0.706 0.980 1.0" />
+	<color name="WornOutfitTextColor" value="0.651 0.890 0.631 1.0" />
+	<color name="FolderViewLoadingMessageTextColor" value="0.651 0.678 0.784 1.0" />
+
+	<!-- Focus / misc -->
+	<color name="FocusColor" value="0.537 0.706 0.980 0.75" />
+	<color name="DefaultHighlightDark" value="0.271 0.278 0.353 1.0" />
+	<color name="DefaultHighlightLight" value="0.271 0.278 0.353 1.0" />
+	<color name="DefaultShadowDark" value="0.067 0.067 0.106 1.0" />
+	<color name="DefaultShadowLight" value="0.094 0.094 0.145 1.0" />
+	<color name="AgentChatColor" value="0.537 0.706 0.980 1.0" />
+	<color name="AgentLinkColor" value="0.537 0.706 0.980 1.0" />
+	<color name="HTMLLinkColorHovertips" value="0.651 0.890 0.631 1.0" />
+	<color name="StatusUserOnline" value="0.651 0.890 0.631 1.0" />
+	<color name="StatusUserOffline" value="0.424 0.439 0.525 1.0" />
+	<color name="ToolbarDropZoneColor" value="0.537 0.706 0.980 0.35" />
+</colors>

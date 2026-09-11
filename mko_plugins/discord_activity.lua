@@ -1,6 +1,32 @@
 -- Auto-initialize the mko_discord plugin and keep rich presence in sync.
 
-local APP_ID = "1263849976069623861"
+local function read_config_file()
+    local paths = {}
+    local home = os.getenv("HOME") or os.getenv("USERPROFILE")
+    local xdg = os.getenv("XDG_CONFIG_HOME")
+    local appdata = os.getenv("APPDATA")
+    if xdg then
+        table.insert(paths, xdg .. "/manikineko/discord_api_key")
+    end
+    if home then
+        table.insert(paths, home .. "/.config/manikineko/discord_api_key")
+    end
+    if appdata then
+        table.insert(paths, appdata .. "/Manikineko/discord_api_key")
+    end
+    for _, p in ipairs(paths) do
+        local f = io.open(p, "r")
+        if f then
+            local s = f:read("*all")
+            f:close()
+            s = s:match("^%s*(.-)%s*$")
+            if s and s ~= "" then return s end
+        end
+    end
+    return nil
+end
+
+local APP_ID = read_config_file() or "1263849976069623861"
 
 local function get_setting(name, default)
     local v = mko.get_setting(name)
